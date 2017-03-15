@@ -17,9 +17,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 import java.util.UUID;
 
