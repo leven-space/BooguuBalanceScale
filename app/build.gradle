@@ -29,6 +29,8 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.beardedhen:androidbootstrap:2.3.1' //android boot strap
     compile 'me.yokeyword:fragmentation:0.10.1' //android fragment
+    compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'// Spring MVC
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'//spring mvc 依赖包
     testCompile 'junit:junit:4.12'
     compile files('libs/commons-lang3-3.5.jar')
 }
