@@ -16,9 +16,9 @@
         app:buttonMode="regular"
         app:roundedCorners="true"
         app:showOutline="true"
-        android:layout_above="@+id/btn_quit"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp" />
+        />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/btn_quit"
@@ -30,9 +30,9 @@
             app:buttonMode="regular"
             app:roundedCorners="true"
             app:showOutline="true"
-        android:layout_marginBottom="144dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/btn_setting"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp" />
 
 
 </RelativeLayout>

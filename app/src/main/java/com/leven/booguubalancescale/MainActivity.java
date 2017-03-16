@@ -1,6 +1,7 @@
 package com.leven.booguubalancescale;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
 import com.leven.booguubalancescale.setting.fragment.SettingFragment;
@@ -20,6 +21,7 @@ public class MainActivity extends SupportActivity {
             loadRootFragment(R.id.app_main_container, SettingFragment.newInstance());  // 加载根Fragment
         }
     }
+
 
 
 }
