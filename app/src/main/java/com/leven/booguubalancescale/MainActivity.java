@@ -2,6 +2,9 @@ package com.leven.booguubalancescale;
 
 import android.os.Bundle;
 
+import com.leven.booguubalancescale.home.fragment.HomeFragment;
+import com.leven.booguubalancescale.setting.fragment.SettingFragment;
+
 import me.yokeyword.fragmentation.SupportActivity;
 
 public class MainActivity extends SupportActivity {
@@ -13,13 +16,10 @@ public class MainActivity extends SupportActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bindViews();
+        if (savedInstanceState == null) {
+            loadRootFragment(R.id.app_main_container, SettingFragment.newInstance());  // 加载根Fragment
+        }
     }
-
-    private void bindViews() {
-
-    }
-
 
 
 }
