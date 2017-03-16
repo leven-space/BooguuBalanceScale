@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\commons-lang3-3.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6c6c702c89bfff3cd9e80b04d668c5e190d588c6">
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\commons-lang3-3.5_ba43ae03f4aee02c86472c7cdd5003aaca114169.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\leven.chen\.android\build-cache\2ab429f664b9b4c2dcd2543e865cd94d41c668dd\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1d16ffcc50b1dfa726cf978ea9f0a949cdd70e7d">
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_a9fded80fba5628f7aa20f6b52519445b9864077.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\leven.chen\.android\build-cache\fc25dd59624e12b3977b8a3daa04df19d8a3dc8b\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7dc4e0ea5b06183f6b32f08c5db6bcb6ef79c02a">
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_c723598446cf9a590c8bdad6b97136a25870d96c.jar" />
+    </item>
+
+</items>

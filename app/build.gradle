@@ -36,6 +36,7 @@ dependencies {
     compile 'me.yokeyword:fragmentation:0.10.1'
     compile files('src/main/lib/commons-lang3-3.5.jar')
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
    // compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     //compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
 

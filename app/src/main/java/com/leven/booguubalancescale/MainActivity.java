@@ -1,13 +1,25 @@
 package com.leven.booguubalancescale;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import me.yokeyword.fragmentation.SupportActivity;
+
+public class MainActivity extends SupportActivity {
+
+    private static String TAG="MainActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bindViews();
     }
+
+    private void bindViews() {
+
+    }
+
+
+
 }
