@@ -24,21 +24,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //android boot strap
-    //android fragment
-    // Spring MVC
-    //spring mvc 依赖包
+    compile files('src/main/lib/commons-lang3-3.5.jar')
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.beardedhen:androidbootstrap:2.3.1'
     compile 'me.yokeyword:fragmentation:0.10.1'
-    compile files('src/main/lib/commons-lang3-3.5.jar')
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
-   // compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
-    //compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
-
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     testCompile 'junit:junit:4.12'
-
 }
