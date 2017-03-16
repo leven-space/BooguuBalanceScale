@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\0d235a290daf995643e2a348ba07b5c2d5df7eb0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3d4e44ca1ca6dede5553e71d806f5359149bc557\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\11f13919d4bac376f06ece99133138052899c010\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="cb454b52545859ed2f24a6c01366805b0fa04b22">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_31f841c1dea49a51940c3a7dcc57454c6681a3c4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\6152b8890c85bdfc3fcadf38292d9253a2de6571\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="702d339bc0a81d21354cd7e2cf2b67225fa4a16c">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_686bcbef04ab0df2e3344a061175fc578f96a3f0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\105b1e023bc4c0a6028f5d9a4775fe50bdd0c856\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="88639dde3c64847812d3c0d0035c5fc3e3e621fc">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f7146967e54d1e206fd2dfe46f92808af0065830\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\669c032539b3ed1b79bb4ab5dae86c7cfbc00c0b\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3984e207c77038219106f05228fd74a835198d50\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="412d2c15efa6e4fb0f47ff43a938664bee51386c">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_c462d42de3ba9c36a7c08b2492ae83f44ddf2434\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\038c3efcaa45a2f0f5aed9ca32912b0b76ee003a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="810f41e5b7fd99f196ebeabe865ba2c54e7e76dc">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cc103e8a827c576a3a03dd50411ca9a3f41e967c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\SOFT\Android\SDK\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.0.2_2229db985d278ed78a6131ecf6f8ea3adc924c5e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\2a180229f2e70f4c3aa6a9437c1b4f9640c2bcf9\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="15d27cbae6167c3ae26842789c07898cda5c0dce">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_995a1bf9c298d466ec3141879df3e33917faa68d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\47892f95e6f23d783b59921ccbdb38c14e0919e3\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8080c9325b3967b8201e20f8b2b981b890a77cfb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\commons-lang3-3.5.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6c6c702c89bfff3cd9e80b04d668c5e190d588c6">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\2\commons-lang3-3.5_6eff049183fa42c605129a19c0f6c6eb519b951b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\SOFT\Android\SDK\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.2.0_c6b2e80ce1f88ee54e749fe921be25e2ece14364\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\fd42e07ed63707655d3aa0a2e1b90630af5dba4f\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_abdba982d53f917408d9acb189a95d5dfc407c33\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\28c256b7bcd81c66da6199d98774e0fc9365120a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_0117c86ee92492bfbd21a8a2d36f2789a2f37658\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\f06f7fcce7b94d73ff165416754879d5a96ad5b8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1d16ffcc50b1dfa726cf978ea9f0a949cdd70e7d">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c7e5c3b3c1e6d24f660adc68d24269b7ec251f4c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.gradle\caches\modules-2\files-2.1\com.alibaba\fastjson\1.1.56.android\4eef0ac3ef5e18db7af5d44ca0228ca5c29dd2f6\fastjson-1.1.56.android.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4eef0ac3ef5e18db7af5d44ca0228ca5c29dd2f6">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\fastjson-1.1.56.android_af1deee4e5d867409adad7b84eb8fd5d20ee62ea\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\977411963ac69361d50e53232d44e4fc0a70aeed\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5ec54299c3b0700da5d511e13ed6312e0d22e399\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_92fd2c945ae9f876fecfce082200f2c2ee7fbd05\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\thinkpad\.android\build-cache\1ba8ac0c69590a7c9af292bf146a682edb3c0418\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
+        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_85784bf63d686830d1e439aa7c25f1d96aefe570\classes.dex" />
+    </item>
+
+</items>
