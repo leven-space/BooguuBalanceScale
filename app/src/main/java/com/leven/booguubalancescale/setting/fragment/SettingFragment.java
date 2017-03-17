@@ -18,7 +18,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  *
  */
 public class SettingFragment extends SupportFragment implements View.OnClickListener {
-    private static final String TAG="SettingFragment";
+    private static final String TAG = "SettingFragment";
     private BootstrapButton btnQuit;
     private BootstrapButton btnSetting;
 
@@ -35,7 +35,7 @@ public class SettingFragment extends SupportFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView=inflater.inflate(R.layout.fragment_setting, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
         BootstrapButton btnSetting = (BootstrapButton) rootView.findViewById(R.id.btn_setting);
         BootstrapButton btnQuit = (BootstrapButton) rootView.findViewById(R.id.btn_quit);
         btnSetting.setOnClickListener(this);
@@ -44,12 +44,11 @@ public class SettingFragment extends SupportFragment implements View.OnClickList
     }
 
 
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_setting:
-                loadRootFragment(R.id.app_main_container,BluetoothFragment.newInstance());
+                loadRootFragment(R.id.layout_setting_container, BluetoothFragment.newInstance());
                 break;
             case R.id.btn_quit:
                 break;
