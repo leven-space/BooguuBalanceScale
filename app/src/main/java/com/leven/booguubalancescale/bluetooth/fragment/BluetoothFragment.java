@@ -3,7 +3,10 @@ package com.leven.booguubalancescale.bluetooth.fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,20 +16,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.leven.booguubalancescale.BuildConfig;
+import com.leven.booguubalancescale.MainActivity;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.bluetooth.adapter.LeDeviceListAdapter;
+import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
+import com.leven.booguubalancescale.home.fragment.HomeFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
 
 public class BluetoothFragment extends SupportFragment {
     private static final String TAG = "BluetoothFragment";
-    public static final String DEVICE_ADDRESS="DeviceAddress";
+    public static final String DEVICE_ADDRESS = "DeviceAddress";
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
+    private BluetoothFragment.OnBluetoothFragmentInteractionListener blueInteractionListener;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     //View
     private ListView lv_devices;
@@ -82,10 +91,10 @@ public class BluetoothFragment extends SupportFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
-                String deviceAddress=device.getAddress();
-                Log.i(TAG, "choose device: "+deviceAddress);
+                String deviceAddress = device.getAddress();
+                Log.i(TAG, "choose device: " + deviceAddress);
                 setResult(deviceAddress);
-                pop();
+                blueInteractionListener.connectDevice(deviceAddress);
             }
         });
         return rootView;
@@ -94,10 +103,16 @@ public class BluetoothFragment extends SupportFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof BluetoothFragment.OnBluetoothFragmentInteractionListener) {
+            blueInteractionListener = (BluetoothFragment.OnBluetoothFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
-
+        context.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
@@ -109,12 +124,14 @@ public class BluetoothFragment extends SupportFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        blueInteractionListener = null;
+        this.getContext().unregisterReceiver(mGattUpdateReceiver);
     }
 
-    private void setResult(String address){
+    private void setResult(String address) {
         Bundle bundle = new Bundle();
         bundle.putString(DEVICE_ADDRESS, address);
-        setFragmentResult(RESULT_OK,bundle);
+        setFragmentResult(RESULT_OK, bundle);
     }
 
 
@@ -139,6 +156,37 @@ public class BluetoothFragment extends SupportFragment {
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
+
+    }
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {  //successful
+                Log.e(TAG, "In what we need");
+                Toast.makeText(BluetoothFragment.this.getActivity(), "连接成功", Toast.LENGTH_SHORT).show();
+                pop();
+            }
+        }
+    };
+
+    private static IntentFilter makeGattUpdateIntentFilter() {                        //Register received event
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        return intentFilter;
+    }
+
+    public interface OnBluetoothFragmentInteractionListener {
+
+        /**
+         * 连接设备
+         *
+         * @param address mac 地址
+         * @return true 连接成功
+         */
+        public boolean connectDevice(String address);
+
 
     }
 
