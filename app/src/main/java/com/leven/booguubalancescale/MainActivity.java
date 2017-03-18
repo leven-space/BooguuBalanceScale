@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.leven.booguubalancescale.bluetooth.fragment.BluetoothFragment;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
+import com.leven.booguubalancescale.common.CmdUtil;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
 import com.leven.booguubalancescale.setting.fragment.SettingFragment;
 
@@ -100,6 +101,8 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
 
         //跳转主页
         if (savedInstanceState == null) {
+            setDefaultFragmentBackground(R.color.main_background_color);
+
             loadRootFragment(R.id.app_main_container, HomeFragment.newInstance());
         }
     }
@@ -124,6 +127,17 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     @Override
     public boolean connectDevice(String address) {
         return mBluetoothLeService.connect(address);
+    }
+
+    @Override
+    public void getAmount() {
+        mBluetoothLeService.writeValue(CmdUtil.collectedAmount);
+    }
+
+    @Override
+    public void getData() {
+        mBluetoothLeService.writeValue(CmdUtil.collectedData);
+
     }
 
     @Override

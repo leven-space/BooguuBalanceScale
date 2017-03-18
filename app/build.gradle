@@ -33,5 +33,6 @@ dependencies {
     compile 'me.yokeyword:fragmentation:0.10.1'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
     testCompile 'junit:junit:4.12'
 }

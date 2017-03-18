@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,10 +26,13 @@ import com.leven.booguubalancescale.bluetooth.adapter.LeDeviceListAdapter;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
 
+import org.apache.commons.lang3.StringUtils;
+
 import me.yokeyword.fragmentation.SupportFragment;
+import pl.droidsonroids.gif.GifImageView;
 
 
-public class BluetoothFragment extends SupportFragment {
+public class BluetoothFragment extends SupportFragment implements View.OnClickListener {
     private static final String TAG = "BluetoothFragment";
     public static final String DEVICE_ADDRESS = "DeviceAddress";
     // Stops scanning after 10 seconds.
@@ -39,6 +43,8 @@ public class BluetoothFragment extends SupportFragment {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     //View
     private ListView lv_devices;
+    private ImageButton btnBleSearch;
+    private GifImageView gifImageView;
 
     // Hander
     public final Handler mHandler = new Handler() {
@@ -84,20 +90,44 @@ public class BluetoothFragment extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ble_home, container, false);
-        mLeDeviceListAdapter = new LeDeviceListAdapter(getActivity().getLayoutInflater());
+        gifImageView = (GifImageView) rootView.findViewById(R.id.giv_ble_gif);
+        btnBleSearch = (ImageButton) rootView.findViewById(R.id.btn_ble_search);
+        mLeDeviceListAdapter = new LeDeviceListAdapter(getActivity());
         lv_devices = (ListView) rootView.findViewById(R.id.lv_devices);
         lv_devices.setAdapter(mLeDeviceListAdapter);
-        lv_devices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
-                String deviceAddress = device.getAddress();
-                Log.i(TAG, "choose device: " + deviceAddress);
-                setResult(deviceAddress);
-                blueInteractionListener.connectDevice(deviceAddress);
-            }
-        });
+        btnBleSearch.setOnClickListener(this);
+        gifImageView.setOnClickListener(this);
         return rootView;
+    }
+
+    /**
+     * 点击事件
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_ble_search:
+                startSearch();
+                break;
+            case R.id.giv_ble_gif:
+                stopSearch();
+                break;
+        }
+    }
+
+    private void startSearch() {
+        btnBleSearch.setVisibility(View.INVISIBLE);
+        gifImageView.setVisibility(View.VISIBLE);
+        scanLeDevice(true);
+
+    }
+
+    private void stopSearch() {
+        btnBleSearch.setVisibility(View.VISIBLE);
+        gifImageView.setVisibility(View.INVISIBLE);
+        scanLeDevice(false);
     }
 
     @Override
@@ -118,7 +148,6 @@ public class BluetoothFragment extends SupportFragment {
     @Override
     public void onStart() {
         super.onStart();
-        scanLeDevice(true);
     }
 
     @Override
@@ -167,6 +196,15 @@ public class BluetoothFragment extends SupportFragment {
                 Log.e(TAG, "In what we need");
                 Toast.makeText(BluetoothFragment.this.getActivity(), "连接成功", Toast.LENGTH_SHORT).show();
                 pop();
+            } else if (LeDeviceListAdapter.ACTION_CHOOSE_DEVICE_ADDRESS.equals(action)) {
+                String deviceAddress = intent.getStringExtra(LeDeviceListAdapter.CHOOSE_DEVICE_ADDRESS);
+                if (StringUtils.isNotBlank(deviceAddress)) {
+                    Log.i(TAG, "choose device address" + deviceAddress);
+                    connectDevice(deviceAddress);
+                } else {
+                    Toast.makeText(getActivity(), "蓝牙连接失败，请重试", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
     };
@@ -174,8 +212,20 @@ public class BluetoothFragment extends SupportFragment {
     private static IntentFilter makeGattUpdateIntentFilter() {                        //Register received event
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(LeDeviceListAdapter.ACTION_CHOOSE_DEVICE_ADDRESS);
         return intentFilter;
     }
+
+    /**
+     * 连接设备，保存地址
+     *
+     * @param deviceAddress mac地址
+     */
+    private void connectDevice(String deviceAddress) {
+        setResult(deviceAddress);
+        blueInteractionListener.connectDevice(deviceAddress);
+    }
+
 
     public interface OnBluetoothFragmentInteractionListener {
 

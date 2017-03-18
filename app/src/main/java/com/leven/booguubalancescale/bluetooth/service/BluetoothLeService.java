@@ -2,6 +2,7 @@
  * @author leven.chen
  */
 package com.leven.booguubalancescale.bluetooth.service;
+
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -49,20 +51,14 @@ public class BluetoothLeService extends Service {
 
     public BluetoothGattCharacteristic mNotifyCharacteristic;
 
-    public void WriteValue(String strValue) {
-        int start = 0xA0;
-        int stop = 0xA5;
+    public void writeValue(int cmd) {
+        mNotifyCharacteristic.setValue(intToByteArray(cmd));
 
-        if("y".equals(strValue)){
-            mNotifyCharacteristic.setValue( intToByteArray(start));
-        }else {
-            mNotifyCharacteristic.setValue( intToByteArray(stop));
-        }
         mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
     }
 
     public static byte[] intToByteArray(int a) {
-        return new byte[] {
+        return new byte[]{
                 (byte) ((a >> 24) & 0xFF),
                 (byte) ((a >> 16) & 0xFF),
                 (byte) ((a >> 8) & 0xFF),
@@ -217,8 +213,11 @@ public class BluetoothLeService extends Service {
         return new String(hexChars);
     }
 
-    /** * 将16进制的字符串转换为字节数组 *
-     * @param message * @return 字节数组 */
+    /**
+     * 将16进制的字符串转换为字节数组 *
+     *
+     * @param message * @return 字节数组
+     */
     public static byte[] getHexBytes(String message) {
         int len = message.length() / 2;
         char[] chars = message.toCharArray();

@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.beardedhen.androidbootstrap.BootstrapThumbnail;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
 import com.leven.booguubalancescale.BuildConfig;
 import com.leven.booguubalancescale.MainActivity;
 import com.leven.booguubalancescale.R;
@@ -26,7 +28,7 @@ public class HomeFragment extends SupportFragment {
     private static final String TAG = "HomeFragment";
     private static final int REQUEST_CHOOSE_BLE = 0x2;
     private HomeFragment.OnHomeFragmentInteractionListener homeInteractionListener;
-
+    private BootstrapThumbnail bthumbHomeRounded;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -45,6 +47,10 @@ public class HomeFragment extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        bthumbHomeRounded= (BootstrapThumbnail) rootView.findViewById(R.id.bthumb_home_rounded);
+        bthumbHomeRounded.setRounded(true);
+        bthumbHomeRounded.setBootstrapSize(DefaultBootstrapSize.SM);
+        bthumbHomeRounded.setBorderDisplayed(false);
         return rootView;
     }
 
@@ -124,7 +130,7 @@ public class HomeFragment extends SupportFragment {
                 if (BuildConfig.DEBUG) Log.d(TAG, "start device search");
                 start(BluetoothFragment.newInstance());
             }else if (MainActivity.ACTION_AUTO_CONNECT_SUCCESS.equals(action)){
-                //发送获取电量指令
+
             }
         }
     };
@@ -143,7 +149,9 @@ public class HomeFragment extends SupportFragment {
 
     public interface OnHomeFragmentInteractionListener {
 
+        public void getAmount();
 
+        public void getData();
         /**
          * 是否支持ble蓝牙设备
          * @return true 支持 false 不支持
