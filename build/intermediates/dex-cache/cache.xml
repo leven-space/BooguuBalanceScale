@@ -2,40 +2,22 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="C:\Users\thinkpad\.android\build-cache\668c4457f8a1505d3032b8cbef1af903744d4d7e\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3b86e72dbf272c69b3acd5e552066d9f521e9616">
-        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8a350142842c03f196e03da32c2fd6420a0f63d7\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\commons-lang3-3.5.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\commons-lang3-3.5.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="6c6c702c89bfff3cd9e80b04d668c5e190d588c6">
-        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\2\commons-lang3-3.5_6eff049183fa42c605129a19c0f6c6eb519b951b\classes.dex" />
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\commons-lang3-3.5_ba43ae03f4aee02c86472c7cdd5003aaca114169.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\mpandroidchartlibrary-2-2-4.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="2d9e6f878917e203b1ed6aae735b8b816e90c1ab">
-        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_c462d42de3ba9c36a7c08b2492ae83f44ddf2434\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="F:\Workspace\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_92fd2c945ae9f876fecfce082200f2c2ee7fbd05\classes.dex" />
+        sha1="e5455fb794bfcbeb75da252dffd907794614f7fd">
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\mpandroidchartlibrary-2-2-4_b9b98d461002ef1b759b18a94047295f73873c33.jar" />
     </item>
 
 </items>
