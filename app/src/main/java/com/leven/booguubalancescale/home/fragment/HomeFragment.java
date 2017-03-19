@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.beardedhen.androidbootstrap.BootstrapThumbnail;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
@@ -18,17 +19,21 @@ import com.leven.booguubalancescale.MainActivity;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.bluetooth.fragment.BluetoothFragment;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
+import com.leven.booguubalancescale.train.fragment.TrainFragment;
 
 import org.apache.commons.lang3.StringUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
 
-public class HomeFragment extends SupportFragment {
+public class HomeFragment extends SupportFragment implements View.OnClickListener {
     private static final String TAG = "HomeFragment";
     private static final int REQUEST_CHOOSE_BLE = 0x2;
     private HomeFragment.OnHomeFragmentInteractionListener homeInteractionListener;
     private BootstrapThumbnail bthumbHomeRounded;
+    private ImageButton btnHomeTrain;
+    private ImageButton btnHomeTest;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -47,11 +52,27 @@ public class HomeFragment extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        bthumbHomeRounded= (BootstrapThumbnail) rootView.findViewById(R.id.bthumb_home_rounded);
+        bthumbHomeRounded = (BootstrapThumbnail) rootView.findViewById(R.id.bthumb_home_rounded);
         bthumbHomeRounded.setRounded(true);
         bthumbHomeRounded.setBootstrapSize(DefaultBootstrapSize.SM);
         bthumbHomeRounded.setBorderDisplayed(false);
+        btnHomeTest = (ImageButton) rootView.findViewById(R.id.btn_home_test);
+        btnHomeTrain = (ImageButton) rootView.findViewById(R.id.btn_home_train);
+        btnHomeTrain.setOnClickListener(this);
+        btnHomeTest.setOnClickListener(this);
         return rootView;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_home_train:
+                break;
+            case R.id.btn_home_test:
+                start(TrainFragment.newInstance());
+                break;
+        }
     }
 
 
@@ -85,7 +106,7 @@ public class HomeFragment extends SupportFragment {
             // 在此通过Bundle data 获取返回的数据
             String deviceAddress = data.getString(BluetoothFragment.DEVICE_ADDRESS);
             if (StringUtils.isNotBlank(deviceAddress)) {
-               //save address
+                //save address
             } else {
                 Log.w(TAG, "onFragmentResult: 获取蓝牙地址失败");
             }
@@ -96,7 +117,7 @@ public class HomeFragment extends SupportFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        this.homeInteractionListener=null;
+        this.homeInteractionListener = null;
         this.getActivity().unregisterReceiver(mGattUpdateReceiver);
     }
 
@@ -126,10 +147,10 @@ public class HomeFragment extends SupportFragment {
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { //Receive Date
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                 Log.e(TAG, "RECV DATA:" + data);
-            }else if(MainActivity.ACTION_AUTO_CONNECT_FAILE.equals(action)){
+            } else if (MainActivity.ACTION_AUTO_CONNECT_FAILE.equals(action)) {
                 if (BuildConfig.DEBUG) Log.d(TAG, "start device search");
                 start(BluetoothFragment.newInstance());
-            }else if (MainActivity.ACTION_AUTO_CONNECT_SUCCESS.equals(action)){
+            } else if (MainActivity.ACTION_AUTO_CONNECT_SUCCESS.equals(action)) {
 
             }
         }
@@ -147,13 +168,16 @@ public class HomeFragment extends SupportFragment {
         return intentFilter;
     }
 
+
     public interface OnHomeFragmentInteractionListener {
 
         public void getAmount();
 
         public void getData();
+
         /**
          * 是否支持ble蓝牙设备
+         *
          * @return true 支持 false 不支持
          */
         public boolean isSupportDevice();

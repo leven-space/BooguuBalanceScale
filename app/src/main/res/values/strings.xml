@@ -10,4 +10,6 @@
     <string name="error_bluetooth_not_supported">error_bluetooth_not_supported</string>
     <string name="unknown_device">unknown_device</string>
     <string name="tv_home_bettery">Battery: </string>
+    <string name="tv_test">Test</string>
+    <string name="tv_train">Train</string>
 </resources>

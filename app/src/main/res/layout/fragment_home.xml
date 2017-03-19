@@ -9,7 +9,8 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="120dp"
+        android:background="#079ACD">
 
         <com.beardedhen.androidbootstrap.BootstrapThumbnail
             android:id="@+id/bthumb_home_rounded"
@@ -31,7 +32,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="150dp"
             android:layout_marginTop="28dp"
-            app:bootstrapBrand="success"
+            app:bootstrapBrand="secondary"
             app:fontAwesomeIcon="fa_info_circle" />
 
         <com.beardedhen.androidbootstrap.AwesomeTextView
@@ -41,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/fa_info"
             android:layout_below="@+id/fa_info"
-            android:layout_marginTop="25dp"
-            app:bootstrapBrand="success"
+            android:layout_marginTop="23dp"
+            app:bootstrapBrand="secondary"
             app:fontAwesomeIcon="fa_battery_full" />
 
         <TextView
@@ -52,8 +53,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="120dp"
-            android:layout_marginTop="31dp"
-            android:text="TextView" />
+            android:layout_marginTop="30dp"
+            android:text="TextView"
+            android:textColor="@color/defaultFontColor" />
 
         <TextView
             android:id="@+id/tv_home_bettery"
@@ -61,8 +63,9 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tv_home_connect_status"
             android:layout_below="@+id/tv_home_connect_status"
-            android:layout_marginTop="25dp"
-            android:text="@string/tv_home_bettery" />
+            android:layout_marginTop="23dp"
+            android:text="@string/tv_home_bettery"
+            android:textColor="@color/defaultFontColor" />
 
         <TextView
             android:id="@+id/tv_home_bettery_number"
@@ -71,7 +74,8 @@
             android:layout_alignTop="@+id/tv_home_bettery"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/tv_home_bettery"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/defaultFontColor" />
 
     </RelativeLayout>
 
@@ -80,9 +84,47 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/relativeLayout"
+        android:gravity="center"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/btn_home_test"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/test" />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="@string/tv_test"
+            android:textColor="@color/defaultFontColor" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/btn_home_train"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@mipmap/train" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/tv_train"
+            android:textColor="@color/defaultFontColor" />
     </LinearLayout>
 
 
