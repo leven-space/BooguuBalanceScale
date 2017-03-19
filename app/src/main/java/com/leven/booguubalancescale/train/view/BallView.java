@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v7.widget.AppCompatImageView;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.leven.booguubalancescale.R;
 
@@ -25,49 +24,146 @@ import com.leven.booguubalancescale.R;
  */
 
 public class BallView extends View {
-    private static final String TAG = "BallView";
-    private float bitmapX = 446;
-    private float bitmapY = 446;
+    private static final float center = 446;
+    //Path
+    private Bitmap mBitmap;
+    private Paint pathPaint;
+    private Paint mBitmapPaint;
+    private Path mPath;
+    private Canvas mCanvas;
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE = 2;
+    //Ball
+    private float bitmapX = center;
+    private float bitmapY = center;
+    private Paint ballPaint;
+    private Bitmap ballBitmap;
 
     public BallView(Context context) {
         super(context);
+        init();
     }
 
     public BallView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        init();
     }
 
     public BallView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        init();
     }
 
+    private void init() {
+        ballPaint = new Paint(); // 创建并实例化Paint的对象
+        ballBitmap = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ball); // 根据图片生成位图对象
+        //init path
+        mPath = new Path();
+        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        pathPaint = new Paint();
+        pathPaint.setAntiAlias(true);
+        pathPaint.setDither(true);
+        pathPaint.setColor(Color.GREEN);
+        pathPaint.setStyle(Paint.Style.STROKE);
+        pathPaint.setStrokeJoin(Paint.Join.ROUND);
+        pathPaint.setStrokeCap(Paint.Cap.ROUND);
+        pathPaint.setStrokeWidth(12);
+    }
+
+    /**
+     * 移动小球
+     *
+     * @param x
+     * @param y
+     */
     public void move(float x, float y) {
         bitmapX = x;
         bitmapY = y;
-        postInvalidate();
+        invalidate();
+    }
+
+    /**
+     * 绘制路径
+     *
+     * @param x
+     * @param y
+     */
+    public void drawPath(float x, float y) {
+        bitmapX = center;
+        bitmapY = center;
+        touch_move(x, y);
+        invalidate();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        float pathX = 0;
+        float pathY = 0;
+        if (false) {
+            bitmapX = event.getX();
+            bitmapY = event.getY();
+        } else {
+            pathX = event.getX();
+            pathY = event.getY();
+        }
 
-        bitmapX = event.getX();
-        bitmapY = event.getY();
-        Log.i(TAG, "onTouchEvent: " + bitmapY + "-" + bitmapX);
-        postInvalidate();
-        return super.onTouchEvent(event);
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch_start(pathX, pathY);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touch_move(pathX, pathY);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                touch_up();
+                invalidate();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = new Paint(); // 创建并实例化Paint的对象
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ball); // 根据图片生成位图对象
-        canvas.drawBitmap(bitmap, bitmapX, bitmapY, paint); // 绘制小球
-        if (bitmap.isRecycled()) { // 判断图片是否回收
-            bitmap.recycle(); // 强制回收图片
+        canvas.drawBitmap(ballBitmap, bitmapX, bitmapY, ballPaint); // 绘制小球
+        if (ballBitmap.isRecycled()) { // 判断图片是否回收
+            ballBitmap.recycle(); // 强制回收图片
         }
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.drawPath(mPath, pathPaint);
+    }
+
+    private void touch_start(float x, float y) {
+        mPath.reset();
+        mPath.moveTo(x, y);
+        mX = x;
+        mY = y;
+    }
+
+    private void touch_move(float x, float y) {
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mX = x;
+            mY = y;
+        }
+    }
+
+    private void touch_up() {
+        mPath.lineTo(mX, mY);
+        mCanvas.drawPath(mPath, pathPaint);
+        mPath.reset();
     }
 
 

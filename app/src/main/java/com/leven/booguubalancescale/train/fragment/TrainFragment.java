@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -23,10 +25,14 @@ import java.util.ArrayList;
 import me.yokeyword.fragmentation.SupportFragment;
 
 
-public class TrainFragment extends SupportFragment {
+public class TrainFragment extends SupportFragment implements View.OnClickListener {
 
     private OnTrainFragmentInteractionListener mListener;
     private float sliceSpace = 1f;
+    private ImageButton btnBackHome;
+    private ImageButton btnCalibrate;
+    private ImageButton btnSeeBall;
+    private BootstrapButton btnStart;
     private PieChart pieChart2;//最外层
     private PieChart pieChart1;//中间层
     private PieChart pieChart0;//最里层
@@ -51,14 +57,7 @@ public class TrainFragment extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_train, container, false);
-        ballView = (BallView) rootView.findViewById(R.id.ballView);
-        ballView.bringToFront();
-        pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
-        pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
-        pieChart0 = (PieChart) rootView.findViewById(R.id.pieChart0);
-        setData2();
-        setData1();
-        setData0();
+        bindView(rootView);
         return rootView;
     }
 
@@ -81,6 +80,49 @@ public class TrainFragment extends SupportFragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_train_back_home:
+                break;
+            case R.id.btn_train_calibrate:
+                break;
+            case R.id.btn_train_start:
+                start(TrainResultFragment.newInstance());
+                break;
+            case R.id.btn_train_see_ball:
+                break;
+        }
+    }
+
+    public interface OnTrainFragmentInteractionListener {
+
+    }
+
+    /**
+     * 初始化视图组件
+     */
+    private void bindView(View rootView) {
+        //按钮
+        btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_back_home);
+        btnCalibrate = (ImageButton) rootView.findViewById(R.id.btn_train_calibrate);
+        btnSeeBall = (ImageButton) rootView.findViewById(R.id.btn_train_see_ball);
+        btnStart = (BootstrapButton) rootView.findViewById(R.id.btn_train_start);
+        btnBackHome.setOnClickListener(this);
+        btnCalibrate.setOnClickListener(this);
+        btnSeeBall.setOnClickListener(this);
+        btnStart.setOnClickListener(this);
+        //初始化小球位置
+        ballView = (BallView) rootView.findViewById(R.id.ballView);
+        ballView.bringToFront();
+        //初始化圆环位置
+        pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
+        pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
+        pieChart0 = (PieChart) rootView.findViewById(R.id.pieChart0);
+        setData2();
+        setData1();
+        setData0();
+    }
 
     private void setData2() {
         int count = 3;
@@ -173,7 +215,4 @@ public class TrainFragment extends SupportFragment {
     }
 
 
-    public interface OnTrainFragmentInteractionListener {
-
-    }
 }

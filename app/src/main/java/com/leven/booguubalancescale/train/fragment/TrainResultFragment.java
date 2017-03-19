@@ -7,13 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.RadarData;
+import com.github.mikephil.charting.data.RadarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
+
+import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class TrainResultFragment extends SupportFragment {
 
 
@@ -31,8 +37,11 @@ public class TrainResultFragment extends SupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_train_result, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_train_result, container, false);
+
+        ;
+        return rootView;
     }
+
 
 }
