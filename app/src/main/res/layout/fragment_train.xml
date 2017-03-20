@@ -72,12 +72,12 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/btn_start"
-            android:textColor="@color/defaultFontColor"
+            android:textColor="#17abdc"
             app:bootstrapBrand="secondary"
             app:bootstrapSize="lg"
             app:buttonMode="regular"
             app:roundedCorners="true"
-            app:showOutline="true" />
+            app:showOutline="false" />
 
         <ImageButton
             android:id="@+id/btn_train_see_ball"
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@mipmap/see_ball" />
+            app:srcCompat="@mipmap/ball_see" />
     </LinearLayout>
 
 </RelativeLayout>

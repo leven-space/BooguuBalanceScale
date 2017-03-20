@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
+import com.leven.booguubalancescale.train.view.BallView;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class TrainResultFragment extends SupportFragment {
 
+    private BallView ballView;
 
     public TrainResultFragment() {
         // Required empty public constructor
@@ -29,7 +31,6 @@ public class TrainResultFragment extends SupportFragment {
 
     public static TrainResultFragment newInstance() {
         TrainResultFragment fragment = new TrainResultFragment();
-
         return fragment;
     }
 
@@ -38,8 +39,9 @@ public class TrainResultFragment extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_train_result, container, false);
-
-        ;
+        ballView = (BallView) rootView.findViewById(R.id.ballView_train_result);
+        ballView.drawPath(0, 0);
+        ballView.drawPath(100, 100);
         return rootView;
     }
 

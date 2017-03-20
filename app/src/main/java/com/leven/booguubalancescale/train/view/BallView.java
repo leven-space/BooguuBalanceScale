@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -99,7 +98,7 @@ public class BallView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         float pathX = 0;
         float pathY = 0;
-        if (false) {
+        if (true) {
             bitmapX = event.getX();
             bitmapY = event.getY();
         } else {

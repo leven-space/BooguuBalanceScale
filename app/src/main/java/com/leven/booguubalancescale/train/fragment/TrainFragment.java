@@ -108,6 +108,7 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         btnCalibrate = (ImageButton) rootView.findViewById(R.id.btn_train_calibrate);
         btnSeeBall = (ImageButton) rootView.findViewById(R.id.btn_train_see_ball);
         btnStart = (BootstrapButton) rootView.findViewById(R.id.btn_train_start);
+        btnStart.setTextColor(ColorTemplate.rgb("17ABDC"));
         btnBackHome.setOnClickListener(this);
         btnCalibrate.setOnClickListener(this);
         btnSeeBall.setOnClickListener(this);
