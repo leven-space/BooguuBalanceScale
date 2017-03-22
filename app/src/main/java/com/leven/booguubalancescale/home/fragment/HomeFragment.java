@@ -182,6 +182,12 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
          */
         public boolean isSupportDevice();
 
+        /**
+         * 是否打开蓝牙
+         * @return true
+         */
+        public boolean isOpenBluetooth();
+
     }
 
 

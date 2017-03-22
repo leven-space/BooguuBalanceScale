@@ -14,17 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.leven.booguubalancescale.BuildConfig;
-import com.leven.booguubalancescale.MainActivity;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.bluetooth.adapter.LeDeviceListAdapter;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
-import com.leven.booguubalancescale.home.fragment.HomeFragment;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,6 +33,8 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
     public static final String DEVICE_ADDRESS = "DeviceAddress";
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
+    private static final int MSG_DISCOVERY=0x1;
+    private static final int MSG_FINISHED=0x2;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private BluetoothFragment.OnBluetoothFragmentInteractionListener blueInteractionListener;
@@ -51,8 +49,11 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1: // Notify change
+                case MSG_DISCOVERY: // Notify change
                     mLeDeviceListAdapter.notifyDataSetChanged();
+                    break;
+                case MSG_FINISHED:
+                    stopSearch();
                     break;
             }
         }
@@ -117,6 +118,9 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
         }
     }
 
+    /**
+     * 开始搜索
+     */
     private void startSearch() {
         btnBleSearch.setVisibility(View.INVISIBLE);
         gifImageView.setVisibility(View.VISIBLE);
@@ -124,10 +128,19 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
 
     }
 
+    /**
+     * 取消搜索
+     */
+    private void cancelSearch(){
+        //  scanLeDevice(false);
+    }
+
+    /**
+     * 结束搜索
+     */
     private void stopSearch() {
         btnBleSearch.setVisibility(View.VISIBLE);
         gifImageView.setVisibility(View.INVISIBLE);
-        scanLeDevice(false);
     }
 
     @Override
@@ -172,14 +185,14 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
                 public void run() {
                     if (mScanning) {
                         mScanning = false;
+                        mHandler.sendEmptyMessage(MSG_FINISHED);
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     }
                 }
             }, SCAN_PERIOD);
-
             mScanning = true;
             mLeDeviceListAdapter.clear();
-            mHandler.sendEmptyMessage(1);
+            mHandler.sendEmptyMessage(MSG_DISCOVERY);
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
             mScanning = false;
@@ -204,7 +217,6 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
                 } else {
                     Toast.makeText(getActivity(), "蓝牙连接失败，请重试", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
     };

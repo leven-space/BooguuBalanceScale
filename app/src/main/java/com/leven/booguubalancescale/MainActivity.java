@@ -12,27 +12,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.leven.booguubalancescale.bluetooth.fragment.BluetoothFragment;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
 import com.leven.booguubalancescale.common.CmdUtil;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
-import com.leven.booguubalancescale.setting.fragment.SettingFragment;
 
 import me.yokeyword.fragmentation.SupportActivity;
-import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends SupportActivity implements HomeFragment.OnHomeFragmentInteractionListener,BluetoothFragment.OnBluetoothFragmentInteractionListener {
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private static final int REQUEST_ENABLE_BT=0x2;
+    private static final String TAG = "MainActivity";
     public final static String ACTION_AUTO_CONNECT_FAILE =
             "com.example.bluetooth.le.ACTION_AUTO_CONNECT_FAIL";
     public final static String ACTION_AUTO_CONNECT_SUCCESS =
             "com.example.bluetooth.le.ACTION_AUTO_CONNECT_SUCCESS";
-    private static String TAG = "MainActivity";
     private BluetoothLeService mBluetoothLeService;
     private boolean isSupportDevice = true;
+    private boolean isOpenBluetooth = true;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -94,6 +93,11 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
             Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
         }
 
+        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent,REQUEST_ENABLE_BT);
+        }
+
         //绑定蓝牙服务
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         boolean bindService = this.bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -119,6 +123,14 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(RESULT_CANCELED==resultCode && requestCode==REQUEST_ENABLE_BT){
+            isOpenBluetooth=false;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mServiceConnection);
@@ -138,6 +150,11 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     public void getData() {
         mBluetoothLeService.writeValue(CmdUtil.collectedData);
 
+    }
+
+    @Override
+    public boolean isOpenBluetooth(){
+        return isOpenBluetooth;
     }
 
     @Override
