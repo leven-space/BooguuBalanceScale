@@ -7,9 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.leven.booguubalancescale.R;
 
@@ -23,7 +27,7 @@ import com.leven.booguubalancescale.R;
  */
 
 public class BallView extends View {
-    private static final float center = 446;
+    private static final String TAG="BallView";
     //Path
     private Bitmap mBitmap;
     private Paint pathPaint;
@@ -33,27 +37,30 @@ public class BallView extends View {
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 2;
     //Ball
-    private float bitmapX = center;
-    private float bitmapY = center;
+    private float centerXY=0;
+    private float bitmapX = 0;
+    private float bitmapY = 0;
     private Paint ballPaint;
     private Bitmap ballBitmap;
+    private Context mContext;
 
     public BallView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public BallView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public BallView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
+        this.mContext=context;
         ballPaint = new Paint(); // 创建并实例化Paint的对象
         ballBitmap = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ball); // 根据图片生成位图对象
         //init path
@@ -69,6 +76,7 @@ public class BallView extends View {
         pathPaint.setStrokeWidth(12);
     }
 
+
     /**
      * 移动小球
      *
@@ -81,6 +89,10 @@ public class BallView extends View {
         invalidate();
     }
 
+    public void calibrate(){
+        move(centerXY,centerXY);
+    }
+
     /**
      * 绘制路径
      *
@@ -88,10 +100,19 @@ public class BallView extends View {
      * @param y
      */
     public void drawPath(float x, float y) {
-        bitmapX = center;
-        bitmapY = center;
+        bitmapX = centerXY;
+        bitmapY = centerXY;
         touch_move(x, y);
         invalidate();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        Log.i(TAG, "onLayout: :"+left+"--"+top+"--"+right+"--"+bottom);
+        centerXY=right/2-35;
+        bitmapY=centerXY;
+        bitmapX=centerXY;
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
@@ -141,6 +162,8 @@ public class BallView extends View {
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.drawPath(mPath, pathPaint);
     }
+
+
 
     private void touch_start(float x, float y) {
         mPath.reset();

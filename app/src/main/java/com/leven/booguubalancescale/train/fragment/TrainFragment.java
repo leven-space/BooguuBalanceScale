@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
+import com.leven.booguubalancescale.home.fragment.HomeFragment;
 import com.leven.booguubalancescale.train.view.BallView;
 
 import java.util.ArrayList;
@@ -84,13 +85,22 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_train_back_home:
+                goHome();
                 break;
             case R.id.btn_train_calibrate:
+                calibrate();
                 break;
             case R.id.btn_train_start:
                 start(TrainResultFragment.newInstance());
                 break;
             case R.id.btn_train_see_ball:
+                if(View.VISIBLE==ballView.getVisibility()){
+                    ballView.setVisibility(View.INVISIBLE);
+                    btnSeeBall.setImageResource(R.mipmap.ball_hide);
+                }else {
+                    ballView.setVisibility(View.VISIBLE);
+                    btnSeeBall.setImageResource(R.mipmap.ball_see);
+                }
                 break;
         }
     }
@@ -123,6 +133,14 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         setData2();
         setData1();
         setData0();
+    }
+
+    private void goHome(){
+        popTo(HomeFragment.class,false);
+    }
+
+    private void calibrate(){
+        ballView.calibrate();
     }
 
     private void setData2() {

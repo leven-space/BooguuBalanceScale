@@ -46,6 +46,8 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String ACTION_GATT_CLOSE =
+            "com.example.bluetooth.le.ACTION_GATT_CLOSE";
 
     public final static UUID UUID_NOTIFY =
             UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
@@ -110,6 +112,9 @@ public class BluetoothLeService extends Service {
                     Log.i(TAG, "Disconnected from GATT server.");
                     broadcastUpdate(intentAction);
                 }
+            }else {
+                intentAction=ACTION_GATT_CLOSE;
+                broadcastUpdate(intentAction);
             }
         }
 

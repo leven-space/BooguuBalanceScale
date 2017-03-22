@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
+import com.leven.booguubalancescale.home.fragment.HomeFragment;
 import com.leven.booguubalancescale.train.view.BallView;
 
 import java.util.ArrayList;
@@ -43,6 +44,11 @@ public class TrainResultFragment extends SupportFragment {
         ballView.drawPath(0, 0);
         ballView.drawPath(100, 100);
         return rootView;
+    }
+
+
+    private void goHome(){
+        popTo(HomeFragment.class,false);
     }
 
 

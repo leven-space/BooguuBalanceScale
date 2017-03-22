@@ -217,6 +217,8 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
                 } else {
                     Toast.makeText(getActivity(), "蓝牙连接失败，请重试", Toast.LENGTH_SHORT).show();
                 }
+            }else if (BluetoothLeService.ACTION_GATT_CLOSE.equals(action)){
+                Toast.makeText(getActivity(), "设备已关闭，请重新搜索", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -225,6 +227,7 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(LeDeviceListAdapter.ACTION_CHOOSE_DEVICE_ADDRESS);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CLOSE);
         return intentFilter;
     }
 
