@@ -20,7 +20,8 @@
         android:layout_height="320dp"
         android:layout_below="@+id/btn_train_result_back_home"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="40dp"
+        >
 
         <com.leven.booguubalancescale.train.view.BallView
             android:id="@+id/ballView_train_result"
@@ -29,24 +30,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:srcCompat="@mipmap/q1" />
+            app:srcCompat="@mipmap/result_background" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@mipmap/q2" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@mipmap/q3" />
     </FrameLayout>
 
 
