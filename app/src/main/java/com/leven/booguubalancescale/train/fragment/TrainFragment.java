@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
+import com.leven.booguubalancescale.train.pojo.PieDataList;
 import com.leven.booguubalancescale.train.view.BallView;
 
 import java.util.ArrayList;
@@ -130,9 +131,7 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
         pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
         pieChart0 = (PieChart) rootView.findViewById(R.id.pieChart0);
-        setData2();
-        setData1();
-        setData0();
+        initBackground();
     }
 
     private void goHome(){
@@ -143,26 +142,37 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         ballView.calibrate();
     }
 
-    private void setData2() {
+
+    private void initBackground(){
         int count = 3;
+        PieDataList entity=new PieDataList();
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
-        ArrayList<Integer> colors = new ArrayList<Integer>();
         for (int i = 0; i < count + 1; i++) {
             yVals1.add(new Entry(45, i));
             xVals.add(i + "");
         }
-        PieDataSet dataSet = new PieDataSet(yVals1, "");
+        entity.setyVals1(yVals1);
+        entity.setxVals(xVals);
+        setData2(entity);
+        setData1(entity);
+        setData0(entity);
+
+    };
+
+    private void setData2(PieDataList entity) {
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+        PieDataSet dataSet = new PieDataSet(entity.getyVals1(), "");
         dataSet.setSliceSpace(sliceSpace);
         // dataSet.setSelectionShift(1f);
         colors.add(ColorTemplate.rgb("45bce3"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
-        PieData data = new PieData(xVals, dataSet);
+        PieData data = new PieData(entity.getxVals(), dataSet);
         pieChart2.setData(data);
         pieChart2.setDrawHoleEnabled(true); //绘制中心空白
         pieChart2.setHoleRadius(70f);//中心大小
-        pieChart2.setHoleColor(ColorTemplate.rgb("ffffff"));//中心空白颜色
+        pieChart2.setHoleColor(Color.WHITE);//中心空白颜色
         pieChart2.setDrawSliceText(false); //显示中心文字
         pieChart2.setRotationEnabled(false);//是否旋转
         pieChart2.setTouchEnabled(false);//是否可以点击
@@ -174,24 +184,18 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     }
 
 
-    private void setData1() {
+    private void setData1(PieDataList entity) {
         int count = 3;
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-        ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry(45, i));
-            xVals.add(i + "");
-        }
-        PieDataSet dataSet = new PieDataSet(yVals1, "");
+        PieDataSet dataSet = new PieDataSet(entity.getyVals1(), "");
         dataSet.setSliceSpace(sliceSpace);
         //dataSet.setSelectionShift(1f);
         colors.add(ColorTemplate.rgb("6ccae9"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
-        PieData data = new PieData(xVals, dataSet);
+        PieData data = new PieData(entity.getxVals(), dataSet);
         pieChart1.setData(data);
-        pieChart1.setHoleColor(ColorTemplate.rgb("ffffff"));
+        pieChart1.setHoleColor(Color.WHITE);
         pieChart1.setDrawHoleEnabled(true);
         pieChart1.setDrawSliceText(false);
         pieChart1.setRotationEnabled(false);
@@ -204,22 +208,15 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         pieChart1.invalidate();
     }
 
-    private void setData0() {
-        int count = 3;
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-        ArrayList<String> xVals = new ArrayList<String>();
+    private void setData0(PieDataList entity) {
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry(45, i));
-            xVals.add(i + "");
-        }
-        PieDataSet dataSet = new PieDataSet(yVals1, "");
+        PieDataSet dataSet = new PieDataSet(entity.getyVals1(), "");
         dataSet.setSliceSpace(sliceSpace);
         // dataSet.setSelectionShift(1f);
         colors.add(ColorTemplate.rgb("94d8ef"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
-        PieData data = new PieData(xVals, dataSet);
+        PieData data = new PieData(entity.getxVals(), dataSet);
         pieChart0.setData(data);
         pieChart0.setDrawHoleEnabled(true);
         pieChart0.setDrawSliceText(false);
@@ -232,6 +229,8 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         pieChart0.highlightValues(null);
         pieChart0.invalidate();
     }
+
+
 
 
 }
