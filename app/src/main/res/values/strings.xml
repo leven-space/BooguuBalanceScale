@@ -13,4 +13,11 @@
     <string name="tv_test">Test</string>
     <string name="tv_train">Train</string>
     <string name="btn_start">Start</string>
+    <string name="btn_result_again">Test Again</string>
+    <string name="result_pie_instability">Instability Index</string>
+    <string name="result_pie_direction">Direction Variation</string>
+    <string name="result_pie_falling">Falling Risk</string>
+    <string name="result_desc_instability">ABCDJDSIFUSDHFUISDHFISDfsdjiofjosdjfodsjofJSIFOJFIOSJDOJFIOJSDIOJ</string>
+    <string name="result_desc_direction">SHUIFGSOAIJIFOSD JOSDJIFOJOSDIHFWEAHOJO FSJDIOFJOSDJFIOSFNAOUFGHSOHF</string>
+    <string name="result_desc_falling">SJFSIHUIFSHINAIFHUIEHUIFH FHSIDFHUIDSHIUFHUISDHIHF</string>
 </resources>

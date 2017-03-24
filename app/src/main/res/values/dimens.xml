@@ -4,4 +4,5 @@
     <dimen name="default_circle_size">250dp</dimen>
     <dimen name="home_logo_size">80dp</dimen>
     <dimen name="ble_gif_size">150dp</dimen>
+    <dimen name="result_title">20sp</dimen>
 </resources>

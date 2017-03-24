@@ -5,4 +5,11 @@
     <color name="colorAccent">#FF4081</color>
     <color name="main_background_color">#17ABDC</color>
     <color name="defaultFontColor">#ffffff</color>
+    <color name="result_title">#000000</color>
+    <color name="result_content">#bbbbbb</color>
+    <color name="result_pie_content">#666666</color>
+    <color name="result_pie_default">#e7e7e7</color>
+    <color name="result_pie_green">#00b900</color>
+    <color name="result_pie_yellow">#b9b900</color>
+    <color name="result_pie_red">#ff0000</color>
 </resources>

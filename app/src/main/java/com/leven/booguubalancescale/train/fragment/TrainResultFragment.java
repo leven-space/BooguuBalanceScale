@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -42,6 +43,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
     private PieChart pieDirectionChart;
     private PieChart pieFallingChart;
     private ImageButton btnBackHome;
+    private Button btnTestAgain;
 
     public TrainResultFragment() {
         // Required empty public constructor
@@ -66,12 +68,14 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         ballView.bringToFront();
         btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_result_back_home);
         btnBackHome.setOnClickListener(this);
+        btnTestAgain= (Button) rootView.findViewById(R.id.btn_train_result_tast_again);
+        btnTestAgain.setOnClickListener(this);
         pieInstabilityChart = (PieChart) rootView.findViewById(R.id.pie_train_result_instability);
         pieDirectionChart = (PieChart) rootView.findViewById(R.id.pie_train_result_direction);
         pieFallingChart= (PieChart) rootView.findViewById(R.id.pie_train_result_falling);
-        setData(pieInstabilityChart);
-        setData(pieDirectionChart);
-        setData(pieFallingChart);
+        instabilityChart();
+        directionChart();
+        fallingChart();
     }
 
     @Override
@@ -80,8 +84,31 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
             case R.id.btn_train_result_back_home:
                 goHome();
                 break;
+            case R.id.btn_train_result_tast_again:
+                testAgain();
+                break;
         }
     }
+
+
+    private void instabilityChart(){
+        setData(pieInstabilityChart);
+    }
+
+    private void directionChart(){
+        setData(pieDirectionChart);
+
+
+    }
+
+    private void fallingChart(){
+        setData(pieFallingChart);
+
+
+    }
+
+
+
 
     private void setData(PieChart pieChart) {
         int count = 2;
@@ -101,7 +128,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         PieData data = new PieData(xVals, dataSet);
         pieChart.setData(data);
         pieChart.setDrawHoleEnabled(true); //绘制中心空白
-        pieChart.setHoleRadius(70f);//中心大小
+        pieChart.setHoleRadius(90f);//中心大小
         pieChart.setHoleColor(Color.WHITE);//中心空白颜色
         pieChart.setDrawSliceText(true); //显示中心文字
         pieChart.setRotationEnabled(false);//是否旋转
@@ -110,10 +137,9 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         pieChart.setDescription("");
         pieChart.setNoDataText("");
         pieChart.highlightValues(null);
-        pieChart.setMaxAngle(180f); // HALF CHART
-        pieChart.setRotationAngle(180f);
+        pieChart.setMaxAngle(240f); // HALF CHART
+        pieChart.setRotationAngle(150f);
         pieChart.invalidate();
-
     }
 
 
@@ -134,6 +160,10 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
 
     private void goHome() {
         popTo(HomeFragment.class, false);
+    }
+
+    private void testAgain(){
+        pop();
     }
 
 
