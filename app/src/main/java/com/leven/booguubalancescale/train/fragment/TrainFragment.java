@@ -31,6 +31,7 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     private static final String TAG = "TrainFragment";
     private OnTrainFragmentInteractionListener mListener;
     private float sliceSpace = 1f;
+    private boolean canGoBack = true;
     private ImageButton btnBackHome;
     private ImageButton btnCalibrate;
     private ImageButton btnSeeBall;
@@ -103,6 +104,30 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         mListener = null;
     }
 
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        // todo,当该Fragment对用户可见时
+        canGoBack = true;
+        btnCalibrate.setEnabled(true);
+        btnStart.setEnabled(true);
+        btnStart.setText(R.string.btn_start);
+        calibrate();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        // todo,当该Fragment对用户不可见时
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        // 默认flase，继续向上传递
+        return !canGoBack;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -155,8 +180,6 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
                     Log.d(TAG, "onFinish -- 倒计时结束");
                 this.cancel();
                 TrainFragment.this.start(TrainResultFragment.newInstance());
-                TrainFragment.this.btnStart.setEnabled(true);
-                TrainFragment.this.btnStart.setText(R.string.btn_start);
             }
         };
         timer.start();// 开始计时
@@ -171,8 +194,14 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     }
 
     private void goStart() {
+        //开始倒计时
         startCountDownTime(5);
+        //设置返回键不可用
+        canGoBack = false;
+        //设置按钮无效
+        btnCalibrate.setEnabled(false);
     }
+
 
     private void initBackground() {
         int count = 3;
