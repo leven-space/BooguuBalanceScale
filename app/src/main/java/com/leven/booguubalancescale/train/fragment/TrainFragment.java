@@ -2,16 +2,16 @@ package com.leven.booguubalancescale.train.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.github.mikephil.charting.BuildConfig;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -28,7 +28,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 
 public class TrainFragment extends SupportFragment implements View.OnClickListener {
-
+    private static final String TAG = "TrainFragment";
     private OnTrainFragmentInteractionListener mListener;
     private float sliceSpace = 1f;
     private ImageButton btnBackHome;
@@ -63,6 +63,27 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         return rootView;
     }
 
+    private void bindView(View rootView) {
+        //按钮
+        btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_back_home);
+        btnCalibrate = (ImageButton) rootView.findViewById(R.id.btn_train_calibrate);
+        btnSeeBall = (ImageButton) rootView.findViewById(R.id.btn_train_see_ball);
+        btnStart = (BootstrapButton) rootView.findViewById(R.id.btn_train_start);
+        btnStart.setTextColor(ColorTemplate.rgb("17ABDC"));
+        btnBackHome.setOnClickListener(this);
+        btnCalibrate.setOnClickListener(this);
+        btnSeeBall.setOnClickListener(this);
+        btnStart.setOnClickListener(this);
+        //初始化小球位置
+        ballView = (BallView) rootView.findViewById(R.id.ballView);
+        ballView.bringToFront();
+        //初始化圆环位置
+        pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
+        pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
+        pieChart0 = (PieChart) rootView.findViewById(R.id.pieChart0);
+        initBackground();
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -92,13 +113,13 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
                 calibrate();
                 break;
             case R.id.btn_train_start:
-                start(TrainResultFragment.newInstance());
+                goStart();
                 break;
             case R.id.btn_train_see_ball:
-                if(View.VISIBLE==ballView.getVisibility()){
+                if (View.VISIBLE == ballView.getVisibility()) {
                     ballView.setVisibility(View.INVISIBLE);
                     btnSeeBall.setImageResource(R.mipmap.ball_hide);
-                }else {
+                } else {
                     ballView.setVisibility(View.VISIBLE);
                     btnSeeBall.setImageResource(R.mipmap.ball_see);
                 }
@@ -110,42 +131,52 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
 
     }
 
-    /**
-     * 初始化视图组件
-     */
-    private void bindView(View rootView) {
-        //按钮
-        btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_back_home);
-        btnCalibrate = (ImageButton) rootView.findViewById(R.id.btn_train_calibrate);
-        btnSeeBall = (ImageButton) rootView.findViewById(R.id.btn_train_see_ball);
-        btnStart = (BootstrapButton) rootView.findViewById(R.id.btn_train_start);
-        btnStart.setTextColor(ColorTemplate.rgb("17ABDC"));
-        btnBackHome.setOnClickListener(this);
-        btnCalibrate.setOnClickListener(this);
-        btnSeeBall.setOnClickListener(this);
-        btnStart.setOnClickListener(this);
-        //初始化小球位置
-        ballView = (BallView) rootView.findViewById(R.id.ballView);
-        ballView.bringToFront();
-        //初始化圆环位置
-        pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
-        pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
-        pieChart0 = (PieChart) rootView.findViewById(R.id.pieChart0);
-        initBackground();
+
+    private void startCountDownTime(long second) {
+        /**
+         * 最简单的倒计时类，实现了官方的CountDownTimer类（没有特殊要求的话可以使用）
+         * 即使退出activity，倒计时还能进行，因为是创建了后台的线程。
+         * 有onTick，onFinsh、cancel和start方法
+         */
+        CountDownTimer timer = new CountDownTimer(second * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //每隔countDownInterval秒会回调一次onTick()方法
+                float ss = millisUntilFinished / 1000;
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "onTick  " + millisUntilFinished / 1000);
+                TrainFragment.this.btnStart.setText(ss + "");
+                TrainFragment.this.btnStart.setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "onFinish -- 倒计时结束");
+                this.cancel();
+                TrainFragment.this.start(TrainResultFragment.newInstance());
+                TrainFragment.this.btnStart.setEnabled(true);
+                TrainFragment.this.btnStart.setText(R.string.btn_start);
+            }
+        };
+        timer.start();// 开始计时
     }
 
-    private void goHome(){
-        popTo(HomeFragment.class,false);
+    private void goHome() {
+        popTo(HomeFragment.class, false);
     }
 
-    private void calibrate(){
+    private void calibrate() {
         ballView.calibrate();
     }
 
+    private void goStart() {
+        startCountDownTime(5);
+    }
 
-    private void initBackground(){
+    private void initBackground() {
         int count = 3;
-        PieDataList entity=new PieDataList();
+        PieDataList entity = new PieDataList();
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count + 1; i++) {
@@ -158,7 +189,9 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         setData1(entity);
         setData0(entity);
 
-    };
+    }
+
+    ;
 
     private void setData2(PieDataList entity) {
         ArrayList<Integer> colors = new ArrayList<Integer>();
@@ -229,8 +262,6 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         pieChart0.highlightValues(null);
         pieChart0.invalidate();
     }
-
-
 
 
 }

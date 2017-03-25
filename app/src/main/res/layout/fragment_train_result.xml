@@ -31,16 +31,16 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/frameLayout"
+                android:id="@+id/frameLayout_train_result"
                 android:layout_width="320dp"
                 android:layout_height="320dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp">
 
-                <com.leven.booguubalancescale.train.view.PathView
-                    android:id="@+id/ballView_train_result"
+              <!--  <com.leven.booguubalancescale.train.view.PathView
+                    android:id="@+id/pathView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent" />-->
 
                 <ImageView
                     android:id="@+id/imageView"

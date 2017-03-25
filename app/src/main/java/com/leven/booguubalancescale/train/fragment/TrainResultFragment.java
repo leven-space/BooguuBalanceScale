@@ -2,7 +2,6 @@ package com.leven.booguubalancescale.train.fragment;
 
 
 import android.graphics.Color;
-import android.graphics.Path;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -13,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -22,8 +22,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
+import com.leven.booguubalancescale.train.pojo.PointEntity;
 import com.leven.booguubalancescale.train.util.MyColorTemplate;
-import com.leven.booguubalancescale.train.view.BallView;
 import com.leven.booguubalancescale.train.view.PathView;
 
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
     private PieChart pieFallingChart;
     private ImageButton btnBackHome;
     private Button btnTestAgain;
+
+
 
     public TrainResultFragment() {
         // Required empty public constructor
@@ -59,8 +61,12 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
     }
 
     private void bindView(View rootView) {
-        pathView = (PathView) rootView.findViewById(R.id.ballView_train_result);
-        pathView.bringToFront();
+        FrameLayout flContraliner = (FrameLayout) rootView.findViewById(R.id.frameLayout_train_result);
+        //初始化轨迹图
+        pathView = new PathView(this.getContext(), getPoint());
+        int params = ViewGroup.LayoutParams.MATCH_PARENT;
+        flContraliner.addView(pathView, params);
+        //初始化按钮
         btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_result_back_home);
         btnBackHome.setOnClickListener(this);
         btnTestAgain = (Button) rootView.findViewById(R.id.btn_train_result_tast_again);
@@ -74,10 +80,6 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         fallingChart(colors);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onClick(View v) {
@@ -102,11 +104,11 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         }
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
-        // dataSet.setSelectionShift(1f);
+
         for (int c : MyColorTemplate.RESULT_PIE_COLORS) {
             colors.add(c);
         }
-        // colors.add(ColorTemplate.rgb("45bce3"));
+
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
         PieData data = new PieData(xVals, dataSet);
@@ -137,7 +139,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         }
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
-        // dataSet.setSelectionShift(1f);
+
         colors.add(ColorTemplate.rgb("45bce3"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
@@ -170,7 +172,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         }
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
-        // dataSet.setSelectionShift(1f);
+
         colors.add(ColorTemplate.rgb("45bce3"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
@@ -226,6 +228,17 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
             colors.add(c);
         }
         return colors;
+    }
+
+
+    private ArrayList<PointEntity> getPoint() {
+        ArrayList<PointEntity> list = new ArrayList<>();
+        list.add(new PointEntity(100, 100));
+        list.add(new PointEntity(100, 200));
+        list.add(new PointEntity(200, 110));
+        list.add(new PointEntity(23, 100));
+        list.add(new PointEntity(100, 50));
+        return list;
     }
 
 

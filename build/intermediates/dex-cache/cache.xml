@@ -3,87 +3,6 @@
 
     <item
         is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\6784e9c64d18b99015765dd37089667bb812736c\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="09adf6e61abc0fe3b2cb5b1795a7033572475fad">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_02f9a0aceb943d3715db7c613e648ae68438873b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\bb4aeaf3c6213bd082b283238ef5b83779780b3c\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="70bfb447e39799c50d15453d4cc210c9b87f6cb2">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_9a4471d66b629146d4f55fb42820d385ea9cce79.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\aef8bff8288cee128e3e5df2f7a6a8c72e0673a4\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e699699fae0092703de1d02b217f43803d0f7e0a">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_601d35e2562b82b11a3d041cae21729d14d4ffa9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\120c3cb07d443847d1db214e698a94efe03749d3\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_fb87cb1b344cb1d5f5be1c396d5e7b1961c3073d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\mpandroidchartlibrary-2-2-4.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e5455fb794bfcbeb75da252dffd907794614f7fd">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\mpandroidchartlibrary-2-2-4_b9b98d461002ef1b759b18a94047295f73873c33.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\25a3abe7b9d67469160cbbf245cbaf706cc8e613\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="93c10d68ab5ea070f15782ae6d3a28d1f1d8f45e">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_d988429f4fb9d0db25f08116b3fb4d82e8e35dc3.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\7980a4b8d6d54cc22a716c7ae146504f9bcdcf65\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4b746ef0fd46acb5aaf3d9ab9a4cec22c28d3211">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_ca46c7c91743ad5d55d9457f2e2a0be393d34131.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\1fb90c51cfb48fd11971ac1a5f818936469cfd4d\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="70f23cb87278f89aa51e6f57e8f0fd5266572d95">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_13d297ed1988c418c5ec01a0c326bb3a31df1695.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\ef32e3661cb8862d9e4617e664a89f80e99d1b83\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="a846ddbf5bf88dee5f89d4dffe22c864f576d9b0">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_acf66baf340754c52adb95eb62fb750df209d179.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\commons-lang3-3.5.jar"
         jumboMode="false"
         optimize="true"
@@ -93,75 +12,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\3baf179e22bb6b50868c8d6f272b3388010c62be\output\jars\classes.jar"
+        jar="D:\AndroidStudioProjects\BooguuBalanceScale\app\src\main\lib\mpandroidchartlibrary-2-2-4.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="425c7b17887e5c3f8cbdf67ba171bc246f29b42c">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_e752d7cf89762c3233f1c76ad89b181535dee8d1.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="E:\Soft\android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.0\support-annotations-25.3.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="dd84903d2e1af25a6081ef9038ad863cb14ca3a0">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.0_662e9c6d3d33f2449918c45587b0bb9cf08a8dc6.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\2fa9519287505d5f2ab7f7b6d97b488e9e7d5a33\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d6a04527c17597019dad82777c5094a3d60d1c33">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_c97bf75caa9cfe15831e1f16da79bbf1597f837e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\2910239de20109564f69133a1f4b86c9678f6225\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="518768f3200963fbfec652f498da2c9d39245234">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_6b753d5d44f70b21c6aa326ea74e536e08176ba3.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\d290695cfb758105da7608699f29a090c5d6db80\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="b43cbd5115bd64d3446584fa0da60fca063914c5">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_2a4495aeb2b36e5c49464452a728bc48ccc4dbb6.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\4e8cc069bf20c76c69d58a4f6a71cde2f517735a\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="93c1199fcb0a34b980e6fff8350daff62e696ec2">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_55fadf8da7fa7d5f19a401857d299cf85ba85fed.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\a1318a3ee900955fe006a31985b96cadbb28446c\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="a3e61044038fb54cddf6b8dc79f41d2b57f42caf">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_4bf0de30ccae318cb8c51062137e62547b6224e9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\leven.chen\.android\build-cache\eb33485e5fc06052025d54e087e0cdffb7fdc6e3\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="5cc5ef8347a6bafa14556cbd35230aa9b3431bb0">
-        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\classes_bb750df45636cca68d8de24786d7c2d7065b0933.jar" />
+        sha1="e5455fb794bfcbeb75da252dffd907794614f7fd">
+        <dex dex="D:\AndroidStudioProjects\BooguuBalanceScale\app\build\intermediates\pre-dexed\debug\mpandroidchartlibrary-2-2-4_b9b98d461002ef1b759b18a94047295f73873c33.jar" />
     </item>
 
 </items>
