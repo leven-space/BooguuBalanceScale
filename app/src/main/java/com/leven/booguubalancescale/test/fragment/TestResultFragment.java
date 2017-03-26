@@ -87,11 +87,14 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieInstabilityChart = (PieChart) rootView.findViewById(R.id.pie_train_result_instability);
         pieDirectionChart = (PieChart) rootView.findViewById(R.id.pie_train_result_direction);
         pieFallingChart = (PieChart) rootView.findViewById(R.id.pie_train_result_falling);
-        instabilityChart();
-        directionChart();
-        fallingChart();
+
         double value = CalculationUtil.instability(resultData);
         if (BuildConfig.DEBUG) Log.d(TAG, "value:" + value);
+        instabilityChart(value);
+        directionChart();
+        fallingChart();
+
+
     }
 
 
@@ -108,11 +111,11 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     }
 
 
-    private void instabilityChart() {
+    private void instabilityChart(double value) {
         ArrayList<Integer> colors = new ArrayList<>();
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
-        int value = 44;
+
         int count = 0;
         if (value <= 33) {
             count = 2;
@@ -156,7 +159,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieInstabilityChart.setMaxAngle(240f); // HALF CHART
         pieInstabilityChart.setRotationAngle(150f);
         pieInstabilityChart.setDrawCenterText(true);
-        pieInstabilityChart.setCenterText(generateCenterSpannableText("21%"));
+        pieInstabilityChart.setCenterText(generateCenterSpannableText(value + ""));
         pieInstabilityChart.invalidate();
 
     }
@@ -193,7 +196,6 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieDirectionChart.setRotationAngle(150f);
         pieDirectionChart.setCenterText(generateCenterSpannableText("21%"));
         pieDirectionChart.invalidate();
-
 
     }
 
@@ -244,18 +246,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     }
 
     private void testAgain() {
-        pop();
-    }
-
-
-    private ArrayList<PointEntity> getPoint() {
-        ArrayList<PointEntity> list = new ArrayList<>();
-        list.add(new PointEntity(100, 100));
-        list.add(new PointEntity(100, 200));
-        list.add(new PointEntity(200, 110));
-        list.add(new PointEntity(23, 100));
-        list.add(new PointEntity(100, 50));
-        return list;
+        popTo(TestFragment.class, false);
     }
 
 

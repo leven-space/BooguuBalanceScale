@@ -40,7 +40,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 public class TestFragment extends SupportFragment implements View.OnClickListener {
     private static final String TAG = "TrainFragment";
     private static final int TAG_VALUE_LENGTH = 22;
-    public static final int COUNT_DOWN_SECOND = 5;
+    public static final int COUNT_DOWN_SECOND = 10;
     public static final int CENTER_OFFSET = 450;
 
     private ArrayList<String> dataList;
@@ -352,7 +352,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                     Log.d(TAG, "onFinish -- 倒计时结束");
                 this.cancel();
                 btnStart.setText("0");
-                TestFragment.this.start(TestResultFragment.newInstance(resultData));
+                TestFragment.this.start(TestResultFragment.newInstance(resultData), SupportFragment.SINGLETOP);
             }
         };
         timer.start();// 开始计时
