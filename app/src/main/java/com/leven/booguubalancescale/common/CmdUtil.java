@@ -17,5 +17,5 @@ public class CmdUtil {
     /**
      * 停止采集
      */
-    public static final int stopCollectedDate = 0xA5;
+    public static final int stopCollectedData = 0xA5;
 }

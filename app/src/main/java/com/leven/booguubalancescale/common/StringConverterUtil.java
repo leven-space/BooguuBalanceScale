@@ -1,5 +1,11 @@
 package com.leven.booguubalancescale.common;
 
+import android.util.Log;
+
+import com.leven.booguubalancescale.BuildConfig;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 字符串转换工具类
  * Created by thinkpad on 2017/3/17.
@@ -8,7 +14,9 @@ package com.leven.booguubalancescale.common;
 public class StringConverterUtil {
 
 
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private static final String TAG = "StringConverterUtil";
+
+    final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     private static char findHex(byte b) {
         int t = new Byte(b).intValue();
@@ -67,4 +75,30 @@ public class StringConverterUtil {
         }
         return bytes;
     }
+
+    public static Float hexToFloat(String hex) {
+        Long i = Long.parseLong(hex, 16);
+        Float f = Float.intBitsToFloat(i.intValue());
+        // String hexString = Integer.toHexString(Float.floatToIntBits(f));
+        if (BuildConfig.DEBUG) Log.d(TAG, "f:" + f);
+        return f;
+    }
+
+    public static Short hexToShort(String hex) throws NumberFormatException {
+        return Short.parseShort(hex, 16);
+    }
+
+    public static int hexToInteger(String hex) {
+        return Integer.parseInt(hex, 16);
+    }
+
+
+    public String reverse(String s) {
+        String low = StringUtils.substring(s, 0, 2);
+        String hight = StringUtils.substring(s, 2, 4);
+        Log.d(TAG, "reverse: " + s + "--" + hight + low);
+        return hight + low;
+    }
+
+
 }

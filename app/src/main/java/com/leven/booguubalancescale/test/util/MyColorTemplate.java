@@ -1,4 +1,4 @@
-package com.leven.booguubalancescale.train.util;
+package com.leven.booguubalancescale.test.util;
 
 import android.graphics.Color;
 

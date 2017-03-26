@@ -46,6 +46,8 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String EXTRA_DATA_BYTE =
+            "com.example.bluetooth.le.EXTRA_DATA_BYTE";
     public final static String ACTION_GATT_CLOSE =
             "com.example.bluetooth.le.ACTION_GATT_CLOSE";
 
@@ -57,11 +59,10 @@ public class BluetoothLeService extends Service {
     public BluetoothGattCharacteristic mNotifyCharacteristic;
 
     public void writeValue(int cmd) {
+        Log.i(TAG, "writeValue: " + cmd);
         mNotifyCharacteristic.setValue(intToByteArray(cmd));
-
         mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
     }
-
 
 
     public void findService(List<BluetoothGattService> gattServices) {
@@ -112,8 +113,8 @@ public class BluetoothLeService extends Service {
                     Log.i(TAG, "Disconnected from GATT server.");
                     broadcastUpdate(intentAction);
                 }
-            }else {
-                intentAction=ACTION_GATT_CLOSE;
+            } else {
+                intentAction = ACTION_GATT_CLOSE;
                 broadcastUpdate(intentAction);
             }
         }
@@ -197,6 +198,7 @@ public class BluetoothLeService extends Service {
             //    stringBuilder.append(String.format("%02X ", byteChar));
             //intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
             intent.putExtra(EXTRA_DATA, bytesToHex(data));
+            intent.putExtra(EXTRA_DATA_BYTE, data);
 
         }
         sendBroadcast(intent);

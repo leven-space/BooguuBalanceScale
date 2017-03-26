@@ -1,4 +1,4 @@
-package com.leven.booguubalancescale.train.pojo;
+package com.leven.booguubalancescale.test.pojo;
 
 /**
  * BooguuBalanceScale

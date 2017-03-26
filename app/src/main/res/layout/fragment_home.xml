@@ -54,27 +54,25 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="120dp"
             android:layout_marginTop="30dp"
-            android:text="TextView"
+            android:text="Disconnected"
             android:textColor="@color/defaultFontColor" />
 
         <TextView
-            android:id="@+id/tv_home_bettery"
+            android:id="@+id/tv_home_battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tv_home_connect_status"
             android:layout_below="@+id/tv_home_connect_status"
             android:layout_marginTop="23dp"
-            android:text="@string/tv_home_bettery"
             android:textColor="@color/defaultFontColor" />
 
         <TextView
-            android:id="@+id/tv_home_bettery_number"
+            android:id="@+id/tv_home_battery_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/tv_home_bettery"
+            android:layout_alignTop="@+id/tv_home_battery"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/tv_home_bettery"
-            android:text="TextView"
+            android:layout_toEndOf="@+id/tv_home_battery"
             android:textColor="@color/defaultFontColor" />
 
     </RelativeLayout>

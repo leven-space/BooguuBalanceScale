@@ -33,8 +33,8 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
     public static final String DEVICE_ADDRESS = "DeviceAddress";
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-    private static final int MSG_DISCOVERY=0x1;
-    private static final int MSG_FINISHED=0x2;
+    private static final int MSG_DISCOVERY = 0x1;
+    private static final int MSG_FINISHED = 0x2;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private BluetoothFragment.OnBluetoothFragmentInteractionListener blueInteractionListener;
@@ -131,7 +131,7 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
     /**
      * 取消搜索
      */
-    private void cancelSearch(){
+    private void cancelSearch() {
         //  scanLeDevice(false);
     }
 
@@ -217,7 +217,7 @@ public class BluetoothFragment extends SupportFragment implements View.OnClickLi
                 } else {
                     Toast.makeText(getActivity(), "蓝牙连接失败，请重试", Toast.LENGTH_SHORT).show();
                 }
-            }else if (BluetoothLeService.ACTION_GATT_CLOSE.equals(action)){
+            } else if (BluetoothLeService.ACTION_GATT_CLOSE.equals(action)) {
                 Toast.makeText(getActivity(), "设备已关闭，请重新搜索", Toast.LENGTH_SHORT).show();
             }
         }

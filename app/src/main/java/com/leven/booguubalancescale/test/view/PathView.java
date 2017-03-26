@@ -1,7 +1,6 @@
-package com.leven.booguubalancescale.train.view;
+package com.leven.booguubalancescale.test.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,13 +11,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.leven.booguubalancescale.BuildConfig;
-import com.leven.booguubalancescale.train.pojo.PointEntity;
+import com.leven.booguubalancescale.test.pojo.PointEntity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * BooguuBalanceScale

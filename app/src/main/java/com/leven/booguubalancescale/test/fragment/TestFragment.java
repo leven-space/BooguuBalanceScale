@@ -1,9 +1,13 @@
-package com.leven.booguubalancescale.train.fragment;
+package com.leven.booguubalancescale.test.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,20 +22,33 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
+import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
+import com.leven.booguubalancescale.common.IntegerConversion;
+import com.leven.booguubalancescale.common.StringConverterUtil;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
-import com.leven.booguubalancescale.train.pojo.PieDataList;
-import com.leven.booguubalancescale.train.view.BallView;
+import com.leven.booguubalancescale.test.pojo.DataEntity;
+import com.leven.booguubalancescale.test.pojo.PieDataList;
+import com.leven.booguubalancescale.test.pojo.ResultEntity;
+import com.leven.booguubalancescale.test.view.BallView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
 
-public class TrainFragment extends SupportFragment implements View.OnClickListener {
+public class TestFragment extends SupportFragment implements View.OnClickListener {
     private static final String TAG = "TrainFragment";
+    private static final int TAG_VALUE_LENGTH = 22;
+    public static final int COUNT_DOWN_SECOND = 5;
     private OnTrainFragmentInteractionListener mListener;
+    private boolean isConnected = true;
+    private ResultEntity resultData;
+    private boolean isCurrentFragment;
     private float sliceSpace = 1f;
     private boolean canGoBack = true;
+    private StringBuilder tempData;//保存坐标点
     private ImageButton btnBackHome;
     private ImageButton btnCalibrate;
     private ImageButton btnSeeBall;
@@ -41,13 +58,13 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     private PieChart pieChart0;//最里层
     private BallView ballView;
 
-    public TrainFragment() {
+    public TestFragment() {
         // Required empty public constructor
     }
 
 
-    public static TrainFragment newInstance() {
-        TrainFragment fragment = new TrainFragment();
+    public static TestFragment newInstance() {
+        TestFragment fragment = new TestFragment();
         return fragment;
     }
 
@@ -61,6 +78,8 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_train, container, false);
         bindView(rootView);
+        resultData = new ResultEntity();
+        tempData = new StringBuilder();
         return rootView;
     }
 
@@ -92,9 +111,11 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         if (context instanceof OnTrainFragmentInteractionListener) {
             mListener = (OnTrainFragmentInteractionListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
+
+        context.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
 
@@ -102,24 +123,36 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        getContext().unregisterReceiver(mGattUpdateReceiver);
     }
 
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        isCurrentFragment = true;
         // todo,当该Fragment对用户可见时
         canGoBack = true;
         btnCalibrate.setEnabled(true);
         btnStart.setEnabled(true);
         btnStart.setText(R.string.btn_start);
         calibrate();
+        if (com.leven.booguubalancescale.BuildConfig.DEBUG)
+            Log.d(TAG, "isConnected:" + isConnected);
+
+        if (isConnected) {
+            mListener.sendBeginCollectDataCmd();
+        }
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        isCurrentFragment = false;
+        if (com.leven.booguubalancescale.BuildConfig.DEBUG)
+            Log.d(TAG, "isConnected:" + isConnected);
         // todo,当该Fragment对用户不可见时
+        mListener.sendStopCollectDataCmd();
     }
 
     @Override
@@ -152,7 +185,103 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
         }
     }
 
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {  //successful
+                Log.e(TAG, "Only gatt, just wait");
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) { //Disconnect
+                Log.i(TAG, "onReceive: disconnected");
+                isConnected = false;
+            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) //do work
+            {
+                Log.e(TAG, "In what we need");
+                isConnected = true;
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { //Receive Date
+                String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+                convertData(data);
+            }
+        }
+    };
+
+    /**
+     * 组装蓝牙传输参数
+     *
+     * @param data
+     * @return
+     */
+    private ArrayList<String> assembleData(String data) {
+        ArrayList<String> values = new ArrayList<>();
+        if (StringUtils.isNotEmpty(tempData)) {
+            int needLength = TAG_VALUE_LENGTH - tempData.length();
+            String needStr = StringUtils.substring(data, 0, needLength);
+            String tag = StringUtils.substring(data, needLength, needLength + 2);
+            if (!StringUtils.equalsAny(tag, "C5", "C6")) {
+                Log.e(TAG, "convertData: 错误的传输数据");
+            } else {
+                tempData.append(needStr);
+                values.add(tempData.toString());
+            }
+            tempData.delete(0, tempData.length());
+        }
+
+        if (StringUtils.containsAny(data, "C5", "C6")) {
+            int startIndex = StringUtils.indexOfAny(data, "C5", "C6");
+            int endIndex = startIndex + TAG_VALUE_LENGTH;
+            if (startIndex <= 20 && data.length() >= 20) {
+                String value = StringUtils.substring(data, startIndex, endIndex);
+                values.add(value);
+                String surplusStr = StringUtils.substring(data, endIndex);
+                assembleData(surplusStr);
+            } else {
+                String partValue = StringUtils.substring(data, startIndex);
+                tempData.append(partValue);
+            }
+        }
+        return values;
+    }
+
+    private void convertData(String data) {
+        ArrayList<String> dataList = assembleData(data);
+        for (String t : dataList) {
+            String xStr = StringUtils.substring(t, 10, 14);
+            String yStr = StringUtils.substring(t, 14, 18);
+            String zStr = StringUtils.substring(t, 18, 22);
+            try {
+                short x = ((short) StringConverterUtil.hexToInteger(xStr));
+                short y = (short) StringConverterUtil.hexToInteger(yStr);
+                short z = (short) StringConverterUtil.hexToInteger(zStr);
+                double xg = Double.valueOf(x) / 16384;
+                double yg = Double.valueOf(y) / 16384;
+                double zg = Double.valueOf(z) / 16384;
+                if (!canGoBack) {
+                    resultData.add(new DataEntity(xg, yg, zg));
+                }
+                Log.d(TAG, "convertData: " + xg + "====" + yg + "====" + zg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private static IntentFilter makeGattUpdateIntentFilter() {                        //Register received event
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
+
     public interface OnTrainFragmentInteractionListener {
+
+        void sendBeginCollectDataCmd();
+
+        void sendStopCollectDataCmd();
+
 
     }
 
@@ -170,8 +299,10 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
                 float ss = millisUntilFinished / 1000;
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "onTick  " + millisUntilFinished / 1000);
-                TrainFragment.this.btnStart.setText(ss + "");
-                TrainFragment.this.btnStart.setEnabled(false);
+                String text = Float.valueOf(ss).intValue() + "";
+                if (com.leven.booguubalancescale.BuildConfig.DEBUG) Log.d(TAG, text);
+                TestFragment.this.btnStart.setText(text);
+                TestFragment.this.btnStart.setEnabled(false);
             }
 
             @Override
@@ -179,7 +310,8 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "onFinish -- 倒计时结束");
                 this.cancel();
-                TrainFragment.this.start(TrainResultFragment.newInstance());
+                btnStart.setText("0");
+                TestFragment.this.start(TestResultFragment.newInstance(resultData));
             }
         };
         timer.start();// 开始计时
@@ -191,11 +323,13 @@ public class TrainFragment extends SupportFragment implements View.OnClickListen
 
     private void calibrate() {
         ballView.calibrate();
+
     }
 
     private void goStart() {
         //开始倒计时
-        startCountDownTime(5);
+        btnStart.setText("5");
+        startCountDownTime(COUNT_DOWN_SECOND);
         //设置返回键不可用
         canGoBack = false;
         //设置按钮无效

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapThumbnail;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
@@ -19,7 +20,9 @@ import com.leven.booguubalancescale.MainActivity;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.bluetooth.fragment.BluetoothFragment;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
-import com.leven.booguubalancescale.train.fragment.TrainFragment;
+import com.leven.booguubalancescale.common.StringConverterUtil;
+import com.leven.booguubalancescale.test.fragment.TestFragment;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,11 +31,17 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class HomeFragment extends SupportFragment implements View.OnClickListener {
     private static final String TAG = "HomeFragment";
+    private static final String STSTUS_CONNECTED = "Connected";
+    private static final String STSTUS_DISCONNECTED = "Disconnected";
     private static final int REQUEST_CHOOSE_BLE = 0x2;
     private HomeFragment.OnHomeFragmentInteractionListener homeInteractionListener;
     private BootstrapThumbnail bthumbHomeRounded;
     private ImageButton btnHomeTrain;
     private ImageButton btnHomeTest;
+    private TextView tvBattery;
+    private TextView tvStatus;
+    private boolean isConnected;//是否连接
+    private boolean isCurrentFragment;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,6 +69,8 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
         btnHomeTrain = (ImageButton) rootView.findViewById(R.id.btn_home_train);
         btnHomeTrain.setOnClickListener(this);
         btnHomeTest.setOnClickListener(this);
+        tvBattery = (TextView) rootView.findViewById(R.id.tv_home_battery_number);
+        tvStatus = (TextView) rootView.findViewById(R.id.tv_home_connect_status);
         return rootView;
     }
 
@@ -68,9 +79,10 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_home_train:
+                homeInteractionListener.sendAmountCmd();
                 break;
             case R.id.btn_home_test:
-                start(TrainFragment.newInstance());
+                start(TestFragment.newInstance());
                 break;
         }
     }
@@ -105,8 +117,9 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
         if (requestCode == REQUEST_CHOOSE_BLE && resultCode == RESULT_OK) {
             // 在此通过Bundle data 获取返回的数据
             String deviceAddress = data.getString(BluetoothFragment.DEVICE_ADDRESS);
+            Log.i(TAG, "蓝牙地址: " + deviceAddress);
             if (StringUtils.isNotBlank(deviceAddress)) {
-                //save address
+                Prefs.putString("mac", deviceAddress);
             } else {
                 Log.w(TAG, "onFragmentResult: 获取蓝牙地址失败");
             }
@@ -119,6 +132,25 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
         super.onDetach();
         this.homeInteractionListener = null;
         this.getActivity().unregisterReceiver(mGattUpdateReceiver);
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        // todo,当该Fragment对用户可见时
+        isCurrentFragment = true;
+        if (isConnected) {
+            homeInteractionListener.sendAmountCmd();
+        }
+
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        isCurrentFragment = false;
+        // todo,当该Fragment对用户不可见时
+
     }
 
     @Override
@@ -141,15 +173,26 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
                 Log.e(TAG, "Only gatt, just wait");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) { //Disconnect
                 Log.i(TAG, "onReceive: disconnected");
+                isConnected = false;
+                tvStatus.setText(HomeFragment.STSTUS_DISCONNECTED);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) //do work
             {
                 Log.e(TAG, "In what we need");
+                //连接成功，并获取电量
+                tvStatus.setText(HomeFragment.STSTUS_CONNECTED);
+                isConnected = true;
+                homeInteractionListener.sendAmountCmd();
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { //Receive Date
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                 Log.e(TAG, "RECV DATA:" + data);
+                //设置电压值
+                if (isCurrentFragment) {
+                    setAmountData(data);
+                }
             } else if (MainActivity.ACTION_AUTO_CONNECT_FAILE.equals(action)) {
                 if (BuildConfig.DEBUG) Log.d(TAG, "start device search");
-                start(BluetoothFragment.newInstance());
+                startForResult(BluetoothFragment.newInstance(), REQUEST_CHOOSE_BLE);
+
             } else if (MainActivity.ACTION_AUTO_CONNECT_SUCCESS.equals(action)) {
 
             }
@@ -171,9 +214,10 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
 
     public interface OnHomeFragmentInteractionListener {
 
-        public void getAmount();
-
-        public void getData();
+        /**
+         * 发送获取电量
+         */
+        public void sendAmountCmd();
 
         /**
          * 是否支持ble蓝牙设备
@@ -184,9 +228,38 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
 
         /**
          * 是否打开蓝牙
+         *
          * @return true
          */
         public boolean isOpenBluetooth();
+
+    }
+
+
+    private void setAmountData(String data) {
+        String full = "100%";
+        String low = "5%";
+        Float aFloat = null;
+        try {
+            aFloat = StringConverterUtil.hexToFloat(data);
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if ("05".equals(data)) {
+            return;
+        }
+        float amount = aFloat * 2;
+        if (BuildConfig.DEBUG) Log.d(TAG, "amount:" + amount);
+        if (amount > 4.2) {
+            tvBattery.setText(full);
+        } else if (amount < 3.0) {
+            tvBattery.setText(low);
+        } else {
+
+            Double value = amount / 4.2 * 100;
+            tvBattery.setText(value.intValue() + "%");
+        }
 
     }
 

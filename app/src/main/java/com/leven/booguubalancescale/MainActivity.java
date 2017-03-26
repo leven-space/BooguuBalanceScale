@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -18,18 +19,25 @@ import com.leven.booguubalancescale.bluetooth.fragment.BluetoothFragment;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
 import com.leven.booguubalancescale.common.CmdUtil;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
+import com.leven.booguubalancescale.test.fragment.TestFragment;
+import com.pixplicity.easyprefs.library.Prefs;
+
+import org.apache.commons.lang3.StringUtils;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
-public class MainActivity extends SupportActivity implements HomeFragment.OnHomeFragmentInteractionListener,BluetoothFragment.OnBluetoothFragmentInteractionListener {
+public class MainActivity extends SupportActivity implements HomeFragment.OnHomeFragmentInteractionListener,
+        BluetoothFragment.OnBluetoothFragmentInteractionListener, TestFragment.OnTrainFragmentInteractionListener {
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
-    private static final int REQUEST_ENABLE_BT=0x2;
+    private static final String DEFAULT_DEVICE = "00:0E:16:00:05:67";
+    private static final int REQUEST_ENABLE_BT = 0x2;
     private static final String TAG = "MainActivity";
     public final static String ACTION_AUTO_CONNECT_FAILE =
             "com.example.bluetooth.le.ACTION_AUTO_CONNECT_FAIL";
     public final static String ACTION_AUTO_CONNECT_SUCCESS =
             "com.example.bluetooth.le.ACTION_AUTO_CONNECT_SUCCESS";
     private BluetoothLeService mBluetoothLeService;
+    private BluetoothAdapter mBluetoothAdapter;
     private boolean isSupportDevice = true;
     private boolean isOpenBluetooth = true;
 
@@ -42,11 +50,10 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
             }
             Log.e(TAG, "mBluetoothLeService is okay");
             // Automatically connects to the device upon successful start-up initialization.
-            //mBluetoothLeService.connect(mDeviceAddress);
-            boolean flag=autoConnectDevice();
-            if(flag){
+            boolean flag = autoConnectDevice();
+            if (false) {
                 broadcastUpdate(ACTION_AUTO_CONNECT_SUCCESS);
-            }else {
+            } else {
                 broadcastUpdate(ACTION_AUTO_CONNECT_FAILE);
             }
         }
@@ -58,7 +65,17 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     };
 
     private boolean autoConnectDevice() {
-        return false;
+        String address = Prefs.getString("mac", null);
+        if (StringUtils.isEmpty(address)) {
+            return false;
+        }
+        try {
+            mBluetoothLeService.connect(address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     private void broadcastUpdate(final String action) {
@@ -85,7 +102,7 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter mBluetoothAdapter = bluetoothManager.getAdapter();
+        mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
@@ -93,15 +110,23 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
             Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
         }
 
-        if (mBluetoothAdapter!=null&&!mBluetoothAdapter.isEnabled()) {
+        if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent,REQUEST_ENABLE_BT);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
         //绑定蓝牙服务
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         boolean bindService = this.bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
         Log.d(TAG, "Try to bindService=" + bindService);
+
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
+
 
         //跳转主页
         if (savedInstanceState == null) {
@@ -124,8 +149,8 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(RESULT_CANCELED==resultCode && requestCode==REQUEST_ENABLE_BT){
-            isOpenBluetooth=false;
+        if (RESULT_CANCELED == resultCode && requestCode == REQUEST_ENABLE_BT) {
+            isOpenBluetooth = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -142,18 +167,28 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     }
 
     @Override
-    public void getAmount() {
+    public void sendAmountCmd() {
         mBluetoothLeService.writeValue(CmdUtil.collectedAmount);
+
     }
 
     @Override
-    public void getData() {
+    public void sendBeginCollectDataCmd() {
         mBluetoothLeService.writeValue(CmdUtil.collectedData);
-
     }
 
     @Override
-    public boolean isOpenBluetooth(){
+    public void sendStopCollectDataCmd() {
+        if (BuildConfig.DEBUG) Log.d(TAG, "停止采样");
+        mBluetoothLeService.writeValue(CmdUtil.stopCollectedData);
+        mBluetoothLeService.close();
+        String address = Prefs.getString("mac", DEFAULT_DEVICE);
+        mBluetoothLeService.connect(address);
+    }
+
+
+    @Override
+    public boolean isOpenBluetooth() {
         return isOpenBluetooth;
     }
 
@@ -161,4 +196,6 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     public boolean isSupportDevice() {
         return isSupportDevice;
     }
+
+
 }

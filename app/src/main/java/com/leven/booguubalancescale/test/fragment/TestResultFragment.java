@@ -1,13 +1,15 @@
-package com.leven.booguubalancescale.train.fragment;
+package com.leven.booguubalancescale.test.fragment;
 
 
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +22,24 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.leven.booguubalancescale.BuildConfig;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
-import com.leven.booguubalancescale.train.pojo.PointEntity;
-import com.leven.booguubalancescale.train.util.MyColorTemplate;
-import com.leven.booguubalancescale.train.view.PathView;
+import com.leven.booguubalancescale.test.pojo.PointEntity;
+import com.leven.booguubalancescale.test.pojo.ResultEntity;
+import com.leven.booguubalancescale.test.util.CalculationUtil;
+import com.leven.booguubalancescale.test.util.MyColorTemplate;
+import com.leven.booguubalancescale.test.view.PathView;
 
 import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
 
-public class TrainResultFragment extends SupportFragment implements View.OnClickListener {
-
+public class TestResultFragment extends SupportFragment implements View.OnClickListener {
+    private static final String TAG = "TestResultFragment";
+    private static final String ARG_PARAM = "param";
+    private ResultEntity resultData;
     private PathView pathView;
     private PieChart pieInstabilityChart;
     private PieChart pieDirectionChart;
@@ -41,16 +48,26 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
     private Button btnTestAgain;
 
 
-
-    public TrainResultFragment() {
+    public TestResultFragment() {
         // Required empty public constructor
     }
 
-    public static TrainResultFragment newInstance() {
-        TrainResultFragment fragment = new TrainResultFragment();
+    public static TestResultFragment newInstance(ResultEntity resultData) {
+        TestResultFragment fragment = new TestResultFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PARAM, resultData);
+        fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            resultData = getArguments().getParcelable(ARG_PARAM);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +95,9 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         instabilityChart(colors);
         directionChart(colors);
         fallingChart(colors);
+
+        double value = CalculationUtil.instability(resultData);
+        if (BuildConfig.DEBUG) Log.d(TAG, "value:" + value);
     }
 
 
@@ -125,6 +145,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         pieInstabilityChart.highlightValues(null);
         pieInstabilityChart.setMaxAngle(240f); // HALF CHART
         pieInstabilityChart.setRotationAngle(150f);
+        pieInstabilityChart.setCenterText(generateCenterSpannableText("21%"));
         pieInstabilityChart.invalidate();
 
     }
@@ -157,6 +178,7 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         pieDirectionChart.highlightValues(null);
         pieDirectionChart.setMaxAngle(240f); // HALF CHART
         pieDirectionChart.setRotationAngle(150f);
+        pieDirectionChart.setCenterText(generateCenterSpannableText("21%"));
         pieDirectionChart.invalidate();
 
 
@@ -190,21 +212,14 @@ public class TrainResultFragment extends SupportFragment implements View.OnClick
         pieFallingChart.highlightValues(null);
         pieFallingChart.setMaxAngle(240f); // HALF CHART
         pieFallingChart.setRotationAngle(150f);
+        pieFallingChart.setCenterText(generateCenterSpannableText("21%"));
         pieFallingChart.invalidate();
-
 
     }
 
 
-    private SpannableString generateCenterSpannableText() {
-
-        SpannableString s = new SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda");
-        s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
-        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
+    private SpannableString generateCenterSpannableText(String value) {
+        SpannableString s = new SpannableString(value);
         return s;
     }
 

@@ -1,4 +1,4 @@
-package com.leven.booguubalancescale.train.view;
+package com.leven.booguubalancescale.test.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,13 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.leven.booguubalancescale.R;
 

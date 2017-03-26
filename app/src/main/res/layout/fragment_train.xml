@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.leven.booguubalancescale.train.fragment.TrainFragment">
+    tools:context="com.leven.booguubalancescale.test.fragment.TestFragment">
 
     <ImageButton
         android:id="@+id/btn_train_back_home"
@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp">
 
-        <com.leven.booguubalancescale.train.view.BallView
+        <com.leven.booguubalancescale.test.view.BallView
             android:id="@+id/ballView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
