@@ -184,7 +184,7 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
                 homeInteractionListener.sendAmountCmd();
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) { //Receive Date
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                Log.e(TAG, "RECV DATA:" + data);
+                //Log.e(TAG, "RECV DATA:" + data);
                 //设置电压值
                 if (isCurrentFragment) {
                     setAmountData(data);
@@ -256,8 +256,7 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
         } else if (amount < 3.0) {
             tvBattery.setText(low);
         } else {
-
-            Double value = amount / 4.2 * 100;
+            Double value = (amount - 3.0) / 1.2 * 100;
             tvBattery.setText(value.intValue() + "%");
         }
 

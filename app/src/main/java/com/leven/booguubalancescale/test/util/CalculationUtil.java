@@ -31,7 +31,7 @@ public class CalculationUtil {
             value += Math.pow((current.getXg() - last.getXg()), 2) + Math.pow((current.getYg() - last.getYg()), 2) + Math.pow((current.getZg() - last.getZg()), 2);
         }
 
-        return value / TestFragment.COUNT_DOWN_SECOND * Math.pow(10, 4);
+        return value / TestFragment.COUNT_DOWN_SECOND;
 
     }
 }

@@ -14,12 +14,19 @@ public class ResultEntity implements Parcelable {
 
     private ArrayList<DataEntity> dataEntities;
 
+    private ArrayList<PointEntity> pointEntities;
+
     public ResultEntity() {
         dataEntities = new ArrayList<>();
+        pointEntities = new ArrayList<>();
     }
 
     public void add(DataEntity data) {
         dataEntities.add(data);
+    }
+
+    public void add(PointEntity point) {
+        pointEntities.add(point);
     }
 
     public ArrayList<DataEntity> getDataEntities() {
@@ -30,12 +37,15 @@ public class ResultEntity implements Parcelable {
         this.dataEntities = dataEntities;
     }
 
-    @Override
-    public String toString() {
-        return "ResultEntity{" +
-                "dataEntities=" + dataEntities +
-                '}';
+
+    public ArrayList<PointEntity> getPointEntities() {
+        return pointEntities;
     }
+
+    public void setPointEntities(ArrayList<PointEntity> pointEntities) {
+        this.pointEntities = pointEntities;
+    }
+
 
     @Override
     public int describeContents() {
@@ -44,12 +54,13 @@ public class ResultEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.dataEntities);
+        dest.writeTypedList(this.dataEntities);
+        dest.writeTypedList(this.pointEntities);
     }
 
     protected ResultEntity(Parcel in) {
-        this.dataEntities = new ArrayList<DataEntity>();
-        in.readList(this.dataEntities, DataEntity.class.getClassLoader());
+        this.dataEntities = in.createTypedArrayList(DataEntity.CREATOR);
+        this.pointEntities = in.createTypedArrayList(PointEntity.CREATOR);
     }
 
     public static final Parcelable.Creator<ResultEntity> CREATOR = new Parcelable.Creator<ResultEntity>() {

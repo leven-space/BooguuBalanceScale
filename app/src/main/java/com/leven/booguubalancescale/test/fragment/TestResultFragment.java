@@ -2,13 +2,9 @@ package com.leven.booguubalancescale.test.fragment;
 
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +76,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     private void bindView(View rootView) {
         FrameLayout flContraliner = (FrameLayout) rootView.findViewById(R.id.frameLayout_train_result);
         //初始化轨迹图
-        pathView = new PathView(this.getContext(), getPoint());
+        pathView = new PathView(this.getContext(), resultData.getPointEntities());
         int params = ViewGroup.LayoutParams.MATCH_PARENT;
         flContraliner.addView(pathView, params);
         //初始化按钮
@@ -91,11 +87,9 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieInstabilityChart = (PieChart) rootView.findViewById(R.id.pie_train_result_instability);
         pieDirectionChart = (PieChart) rootView.findViewById(R.id.pie_train_result_direction);
         pieFallingChart = (PieChart) rootView.findViewById(R.id.pie_train_result_falling);
-        ArrayList<Integer> colors = initPieColor();
-        instabilityChart(colors);
-        directionChart(colors);
-        fallingChart(colors);
-
+        instabilityChart();
+        directionChart();
+        fallingChart();
         double value = CalculationUtil.instability(resultData);
         if (BuildConfig.DEBUG) Log.d(TAG, "value:" + value);
     }
@@ -114,21 +108,36 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     }
 
 
-    private void instabilityChart(ArrayList<Integer> colors) {
-        int count = 3;
+    private void instabilityChart() {
+        ArrayList<Integer> colors = new ArrayList<>();
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count + 1; i++) {
+        int value = 44;
+        int count = 0;
+        if (value <= 33) {
+            count = 2;
+            for (int c : MyColorTemplate.RESULT_PIE_COLORS2) {
+                colors.add(c);
+            }
+        } else if (value > 33 && value <= 66) {
+            count = 3;
+            for (int c : MyColorTemplate.RESULT_PIE_COLORS3) {
+                colors.add(c);
+            }
+        } else {
+            count = 4;
+            for (int c : MyColorTemplate.RESULT_PIE_COLORS4) {
+                colors.add(c);
+            }
+        }
+
+        for (int i = 0; i < count; i++) {
             yVals1.add(new Entry(45, i));
             xVals.add(i + "");
         }
+
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
-
-        for (int c : MyColorTemplate.RESULT_PIE_COLORS) {
-            colors.add(c);
-        }
-
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
         PieData data = new PieData(xVals, dataSet);
@@ -139,18 +148,21 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieInstabilityChart.setDrawSliceText(true); //显示中心文字
         pieInstabilityChart.setRotationEnabled(false);//是否旋转
         pieInstabilityChart.setTouchEnabled(false);//是否可以点击
+        pieInstabilityChart.setDrawSliceText(false);//隐藏x值
         pieInstabilityChart.getLegend().setEnabled(false);
         pieInstabilityChart.setDescription("");
         pieInstabilityChart.setNoDataText("");
         pieInstabilityChart.highlightValues(null);
         pieInstabilityChart.setMaxAngle(240f); // HALF CHART
         pieInstabilityChart.setRotationAngle(150f);
+        pieInstabilityChart.setDrawCenterText(true);
         pieInstabilityChart.setCenterText(generateCenterSpannableText("21%"));
         pieInstabilityChart.invalidate();
 
     }
 
-    private void directionChart(ArrayList<Integer> colors) {
+    private void directionChart() {
+        ArrayList<Integer> colors = new ArrayList<>();
         int count = 2;
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
@@ -173,6 +185,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieDirectionChart.setRotationEnabled(false);//是否旋转
         pieDirectionChart.setTouchEnabled(false);//是否可以点击
         pieDirectionChart.getLegend().setEnabled(false);
+        pieDirectionChart.setDrawSliceText(false);//隐藏x值
         pieDirectionChart.setDescription("");
         pieDirectionChart.setNoDataText("");
         pieDirectionChart.highlightValues(null);
@@ -184,7 +197,8 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
 
     }
 
-    private void fallingChart(ArrayList<Integer> colors) {
+    private void fallingChart() {
+        ArrayList<Integer> colors = new ArrayList<>();
         int count = 2;
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
@@ -206,6 +220,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieFallingChart.setDrawSliceText(true); //显示中心文字
         pieFallingChart.setRotationEnabled(false);//是否旋转
         pieFallingChart.setTouchEnabled(false);//是否可以点击
+        pieDirectionChart.setDrawSliceText(false);//隐藏x值
         pieFallingChart.getLegend().setEnabled(false);
         pieFallingChart.setDescription("");
         pieFallingChart.setNoDataText("");
@@ -230,19 +245,6 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
 
     private void testAgain() {
         pop();
-    }
-
-    /**
-     * 初始化颜色值
-     *
-     * @return
-     */
-    private ArrayList<Integer> initPieColor() {
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : MyColorTemplate.RESULT_PIE_COLORS) {
-            colors.add(c);
-        }
-        return colors;
     }
 
 

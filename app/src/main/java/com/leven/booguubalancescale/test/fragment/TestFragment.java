@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +22,11 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.bluetooth.service.BluetoothLeService;
-import com.leven.booguubalancescale.common.IntegerConversion;
 import com.leven.booguubalancescale.common.StringConverterUtil;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
 import com.leven.booguubalancescale.test.pojo.DataEntity;
 import com.leven.booguubalancescale.test.pojo.PieDataList;
+import com.leven.booguubalancescale.test.pojo.PointEntity;
 import com.leven.booguubalancescale.test.pojo.ResultEntity;
 import com.leven.booguubalancescale.test.view.BallView;
 
@@ -42,6 +41,13 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     private static final String TAG = "TrainFragment";
     private static final int TAG_VALUE_LENGTH = 22;
     public static final int COUNT_DOWN_SECOND = 5;
+    public static final int CENTER_OFFSET = 450;
+
+    private ArrayList<String> dataList;
+    private int xOffset = 0;
+    private int yOffset = 0;
+    private int xPoint;
+    private int yPoint;
     private OnTrainFragmentInteractionListener mListener;
     private boolean isConnected = true;
     private ResultEntity resultData;
@@ -80,6 +86,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         bindView(rootView);
         resultData = new ResultEntity();
         tempData = new StringBuilder();
+        dataList = new ArrayList<>();
         return rootView;
     }
 
@@ -136,7 +143,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         btnCalibrate.setEnabled(true);
         btnStart.setEnabled(true);
         btnStart.setText(R.string.btn_start);
-        calibrate();
+        //calibrate();
         if (com.leven.booguubalancescale.BuildConfig.DEBUG)
             Log.d(TAG, "isConnected:" + isConnected);
 
@@ -244,8 +251,8 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     }
 
     private void convertData(String data) {
-        ArrayList<String> dataList = assembleData(data);
-        for (String t : dataList) {
+        ArrayList<String> tempDataList = assembleData(data);
+        for (String t : tempDataList) {
             String xStr = StringUtils.substring(t, 10, 14);
             String yStr = StringUtils.substring(t, 14, 18);
             String zStr = StringUtils.substring(t, 18, 22);
@@ -253,17 +260,51 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                 short x = ((short) StringConverterUtil.hexToInteger(xStr));
                 short y = (short) StringConverterUtil.hexToInteger(yStr);
                 short z = (short) StringConverterUtil.hexToInteger(zStr);
-                double xg = Double.valueOf(x) / 16384;
-                double yg = Double.valueOf(y) / 16384;
-                double zg = Double.valueOf(z) / 16384;
+                float xg = Float.valueOf(x) / 16384;
+                float yg = Float.valueOf(y) / 16384;
+                float zg = Float.valueOf(z) / 16384;
                 if (!canGoBack) {
                     resultData.add(new DataEntity(xg, yg, zg));
                 }
-                Log.d(TAG, "convertData: " + xg + "====" + yg + "====" + zg);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+        if (dataList.size() < 20) {
+            dataList.addAll(tempDataList);
+        } else {
+            short sumX = 0;
+            short sumY = 0;
+            for (String t : dataList) {
+                try {
+                    String xStr = StringUtils.substring(t, 10, 14);
+                    String yStr = StringUtils.substring(t, 14, 18);
+                    short x = ((short) StringConverterUtil.hexToInteger(xStr));
+                    short y = (short) StringConverterUtil.hexToInteger(yStr);
+                    float xg = Float.valueOf(x) / 16384;
+                    float yg = Float.valueOf(y) / 16384;
+                    sumX += xg * 5000;
+                    sumY += yg * 5000;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            int len = dataList.size();
+            xPoint = (sumX / len) + CENTER_OFFSET;
+            yPoint = (sumY / len) + CENTER_OFFSET;
+            if (com.leven.booguubalancescale.BuildConfig.DEBUG)
+                Log.d(TAG, "sumX:" + sumX + "sumY:" + sumY + "len:" + len + "xPoint:" + xPoint + "yPoint:" + yPoint);
+            dataList.clear();
+            int tempX = xPoint - xOffset;
+            int tempY = yPoint - yOffset;
+            ballView.move(tempX, tempY);
+            if (!canGoBack) {
+                resultData.add(new PointEntity(tempX, tempY));
+            }
+        }
+
     }
 
 
@@ -322,8 +363,9 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     }
 
     private void calibrate() {
-        ballView.calibrate();
-
+        xOffset = xPoint - CENTER_OFFSET;
+        yOffset = yPoint - CENTER_OFFSET;
+        //ballView.calibrate();
     }
 
     private void goStart() {

@@ -12,7 +12,9 @@ import android.graphics.Color;
 
 public class MyColorTemplate extends com.github.mikephil.charting.utils.ColorTemplate {
 
-    public static final int[] RESULT_PIE_COLORS = new int[]{Color.rgb(0, 185, 0), Color.rgb(185, 185, 0), Color.rgb(200, 0, 0), Color.rgb(231, 231, 231), Color.rgb(42, 109, 130)};
+    public static final int[] RESULT_PIE_COLORS4 = new int[]{Color.rgb(0, 185, 0), Color.rgb(185, 185, 0), Color.rgb(200, 0, 0), Color.rgb(231, 231, 231)};
+    public static final int[] RESULT_PIE_COLORS3 = new int[]{Color.rgb(0, 185, 0), Color.rgb(185, 185, 0), Color.rgb(231, 231, 231)};
+    public static final int[] RESULT_PIE_COLORS2 = new int[]{Color.rgb(0, 185, 0), Color.rgb(231, 231, 231)};
 
 
 }
