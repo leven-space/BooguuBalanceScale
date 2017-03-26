@@ -82,12 +82,15 @@ public class PathView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPath.moveTo(centerXY, centerXY);
-        if (BuildConfig.DEBUG) Log.d("PathView", "centerXY:" + centerXY);
 
         if (!points.isEmpty()) {
-            for (PointEntity entity : points) {
-                mPath.lineTo(entity.getX(), entity.getY());
+            for (int i = 0, len = points.size(); i < len; i++) {
+                PointEntity entity = points.get(i);
+                if (i == 0) {
+                    mPath.moveTo(entity.getX(), entity.getY());
+                } else {
+                    mPath.lineTo(entity.getX(), entity.getY());
+                }
             }
         }
         mPath.close();

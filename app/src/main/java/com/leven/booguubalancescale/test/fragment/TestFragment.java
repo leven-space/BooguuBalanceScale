@@ -41,13 +41,16 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     private static final String TAG = "TrainFragment";
     private static final int TAG_VALUE_LENGTH = 22;
     public static final int COUNT_DOWN_SECOND = 10;
-    public static final int CENTER_OFFSET = 450;
+
 
     private ArrayList<String> dataList;
+    public int CENTER_OFFSET = 450;
     private int xOffset = 0;
     private int yOffset = 0;
     private int xPoint;
     private int yPoint;
+    private float xg;
+    private float yg;
     private OnTrainFragmentInteractionListener mListener;
     private boolean isConnected = true;
     private ResultEntity resultData;
@@ -91,6 +94,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     }
 
     private void bindView(View rootView) {
+
         //按钮
         btnBackHome = (ImageButton) rootView.findViewById(R.id.btn_train_back_home);
         btnCalibrate = (ImageButton) rootView.findViewById(R.id.btn_train_calibrate);
@@ -104,6 +108,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         //初始化小球位置
         ballView = (BallView) rootView.findViewById(R.id.ballView);
         ballView.bringToFront();
+        CENTER_OFFSET = (int) ballView.getCenterXY();
         //初始化圆环位置
         pieChart2 = (PieChart) rootView.findViewById(R.id.pieChart2);
         pieChart1 = (PieChart) rootView.findViewById(R.id.pieChart1);
@@ -143,7 +148,6 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         btnCalibrate.setEnabled(true);
         btnStart.setEnabled(true);
         btnStart.setText(R.string.btn_start);
-        //calibrate();
         if (com.leven.booguubalancescale.BuildConfig.DEBUG)
             Log.d(TAG, "isConnected:" + isConnected);
 
@@ -283,8 +287,8 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                     String yStr = StringUtils.substring(t, 14, 18);
                     short x = ((short) StringConverterUtil.hexToInteger(xStr));
                     short y = (short) StringConverterUtil.hexToInteger(yStr);
-                    float xg = Float.valueOf(x) / 16384;
-                    float yg = Float.valueOf(y) / 16384;
+                    xg = Float.valueOf(x) / 16384;
+                    yg = Float.valueOf(y) / 16384;
                     sumX += xg * 5000;
                     sumY += yg * 5000;
                 } catch (Exception e) {
@@ -294,8 +298,6 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
             int len = dataList.size();
             xPoint = (sumX / len) + CENTER_OFFSET;
             yPoint = (sumY / len) + CENTER_OFFSET;
-            if (com.leven.booguubalancescale.BuildConfig.DEBUG)
-                Log.d(TAG, "sumX:" + sumX + "sumY:" + sumY + "len:" + len + "xPoint:" + xPoint + "yPoint:" + yPoint);
             dataList.clear();
             int tempX = xPoint - xOffset;
             int tempY = yPoint - yOffset;
@@ -353,6 +355,7 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                 this.cancel();
                 btnStart.setText("0");
                 TestFragment.this.start(TestResultFragment.newInstance(resultData), SupportFragment.SINGLETOP);
+                resultData = new ResultEntity();
             }
         };
         timer.start();// 开始计时
@@ -365,6 +368,8 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     private void calibrate() {
         xOffset = xPoint - CENTER_OFFSET;
         yOffset = yPoint - CENTER_OFFSET;
+        resultData.setyPoint(yg);
+        resultData.setxPoint(xg);
         //ballView.calibrate();
     }
 

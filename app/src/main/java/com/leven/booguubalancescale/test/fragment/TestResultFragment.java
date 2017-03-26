@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +23,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.leven.booguubalancescale.BuildConfig;
 import com.leven.booguubalancescale.R;
 import com.leven.booguubalancescale.home.fragment.HomeFragment;
-import com.leven.booguubalancescale.test.pojo.PointEntity;
 import com.leven.booguubalancescale.test.pojo.ResultEntity;
 import com.leven.booguubalancescale.test.util.CalculationUtil;
 import com.leven.booguubalancescale.test.util.MyColorTemplate;
 import com.leven.booguubalancescale.test.view.PathView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -40,6 +42,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     private PieChart pieInstabilityChart;
     private PieChart pieDirectionChart;
     private PieChart pieFallingChart;
+    private FrameLayout flContraliner;
     private ImageButton btnBackHome;
     private Button btnTestAgain;
 
@@ -74,7 +77,8 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
     }
 
     private void bindView(View rootView) {
-        FrameLayout flContraliner = (FrameLayout) rootView.findViewById(R.id.frameLayout_train_result);
+        Log.d(TAG, "bindView: 绑定视图");
+        flContraliner = (FrameLayout) rootView.findViewById(R.id.frameLayout_train_result);
         //初始化轨迹图
         pathView = new PathView(this.getContext(), resultData.getPointEntities());
         int params = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -88,15 +92,35 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieDirectionChart = (PieChart) rootView.findViewById(R.id.pie_train_result_direction);
         pieFallingChart = (PieChart) rootView.findViewById(R.id.pie_train_result_falling);
 
-        double value = CalculationUtil.instability(resultData);
-        if (BuildConfig.DEBUG) Log.d(TAG, "value:" + value);
-        instabilityChart(value);
-        directionChart();
-        fallingChart();
+        double instabilityValue = CalculationUtil.instability(resultData);
+        instabilityChart(instabilityValue);
+
+        double directionValue = CalculationUtil.direction(resultData);
+        directionChart(directionValue);
+
+        double fallingValue = CalculationUtil.falling(instabilityValue, directionValue);
+        fallingChart(fallingValue);
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "instabilityValue:" + instabilityValue + "sdfs" + directionValue + "sdfs" + fallingValue);
 
 
     }
 
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        // todo,当该Fragment对用户不可见时
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "bindView: 销毁视图");
+        super.onDestroyView();
+        resultData = null;
+
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -115,29 +139,30 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         ArrayList<Integer> colors = new ArrayList<>();
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
+        Double xPercent;
+        if (value <= 35) {
+            xPercent = Math.ceil(100 - (25 / 35) * value);
 
-        int count = 0;
-        if (value <= 33) {
-            count = 2;
-            for (int c : MyColorTemplate.RESULT_PIE_COLORS2) {
+            for (int c : MyColorTemplate.RESULT_PIE_LOW) {
                 colors.add(c);
             }
-        } else if (value > 33 && value <= 66) {
-            count = 3;
-            for (int c : MyColorTemplate.RESULT_PIE_COLORS3) {
+        } else if (value > 35 && value <= 65) {
+            xPercent = Math.ceil(145 - 2 * value);
+            for (int c : MyColorTemplate.RESULT_PIE_MID) {
                 colors.add(c);
             }
         } else {
-            count = 4;
-            for (int c : MyColorTemplate.RESULT_PIE_COLORS4) {
+            xPercent = Math.ceil(15 - ((15 / 35) * (value - 65)));
+            for (int c : MyColorTemplate.RESULT_PIE_HIGH) {
                 colors.add(c);
             }
         }
-
-        for (int i = 0; i < count; i++) {
-            yVals1.add(new Entry(45, i));
-            xVals.add(i + "");
-        }
+        //赋值
+        float temp = (float) value;
+        yVals1.add(new Entry(temp, 0));
+        xVals.add(0 + "");
+        yVals1.add(new Entry((100 - temp), 0));
+        xVals.add(1 + "");
 
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
@@ -145,6 +170,7 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         dataSet.setDrawValues(false);
         PieData data = new PieData(xVals, dataSet);
         pieInstabilityChart.setData(data);
+
         pieInstabilityChart.setDrawHoleEnabled(true); //绘制中心空白
         pieInstabilityChart.setHoleRadius(90f);//中心大小
         pieInstabilityChart.setHoleColor(Color.WHITE);//中心空白颜色
@@ -159,23 +185,42 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieInstabilityChart.setMaxAngle(240f); // HALF CHART
         pieInstabilityChart.setRotationAngle(150f);
         pieInstabilityChart.setDrawCenterText(true);
-        pieInstabilityChart.setCenterText(generateCenterSpannableText(value + ""));
+        pieInstabilityChart.setCenterText(generateCenterSpannableText((int) value + ""));
         pieInstabilityChart.invalidate();
 
     }
 
-    private void directionChart() {
+    private void directionChart(double value) {
         ArrayList<Integer> colors = new ArrayList<>();
-        int count = 2;
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry(45, i));
-            xVals.add(i + "");
+        ArrayList<Entry> yVals1 = new ArrayList<>();
+        ArrayList<String> xVals = new ArrayList<>();
+        if (value <= 3.5) {
+            for (int c : MyColorTemplate.RESULT_PIE_LOW) {
+                colors.add(c);
+            }
+        } else if (value > 3.5 && value <= 6.5) {
+            for (int c : MyColorTemplate.RESULT_PIE_MID) {
+                colors.add(c);
+            }
+        } else {
+            for (int c : MyColorTemplate.RESULT_PIE_HIGH) {
+                colors.add(c);
+            }
         }
+
+        //赋值
+        float temp = (float) value * 10;
+        yVals1.add(new Entry(temp, 0));
+        xVals.add(0 + "");
+        yVals1.add(new Entry((100 - temp), 0));
+        xVals.add(1 + "");
+
+        NumberFormat ft = NumberFormat.getInstance();
+        ft.setMaximumFractionDigits(1);
+        String strValue = ft.format(value);
+
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
-
         colors.add(ColorTemplate.rgb("45bce3"));
         dataSet.setColors(colors);
         dataSet.setDrawValues(false);
@@ -194,20 +239,40 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieDirectionChart.highlightValues(null);
         pieDirectionChart.setMaxAngle(240f); // HALF CHART
         pieDirectionChart.setRotationAngle(150f);
-        pieDirectionChart.setCenterText(generateCenterSpannableText("21%"));
+        pieDirectionChart.setCenterText(generateCenterSpannableText(strValue));
         pieDirectionChart.invalidate();
 
     }
 
-    private void fallingChart() {
+    private void fallingChart(double value) {
         ArrayList<Integer> colors = new ArrayList<>();
-        int count = 2;
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry(45, i));
-            xVals.add(i + "");
+        ArrayList<String> xVals = new ArrayList<>();
+
+        if (value <= 35) {
+            for (int c : MyColorTemplate.RESULT_PIE_LOW) {
+                colors.add(c);
+            }
+        } else if (value > 35 && value <= 65) {
+            for (int c : MyColorTemplate.RESULT_PIE_MID) {
+                colors.add(c);
+            }
+        } else {
+            for (int c : MyColorTemplate.RESULT_PIE_HIGH) {
+                colors.add(c);
+            }
         }
+
+        //赋值
+        float temp = (float) value;
+        yVals1.add(new Entry(temp, 0));
+        xVals.add(0 + "");
+        yVals1.add(new Entry((100 - temp), 0));
+        xVals.add(1 + "");
+
+
+        pieFallingChart.setCenterText(generateCenterSpannableText(Math.ceil(value) + "%"));
+
         PieDataSet dataSet = new PieDataSet(yVals1, "");
         dataSet.setSliceSpace(2f);
 
@@ -222,22 +287,22 @@ public class TestResultFragment extends SupportFragment implements View.OnClickL
         pieFallingChart.setDrawSliceText(true); //显示中心文字
         pieFallingChart.setRotationEnabled(false);//是否旋转
         pieFallingChart.setTouchEnabled(false);//是否可以点击
-        pieDirectionChart.setDrawSliceText(false);//隐藏x值
+        pieFallingChart.setDrawSliceText(false);//隐藏x值
         pieFallingChart.getLegend().setEnabled(false);
         pieFallingChart.setDescription("");
         pieFallingChart.setNoDataText("");
         pieFallingChart.highlightValues(null);
         pieFallingChart.setMaxAngle(240f); // HALF CHART
         pieFallingChart.setRotationAngle(150f);
-        pieFallingChart.setCenterText(generateCenterSpannableText("21%"));
         pieFallingChart.invalidate();
 
     }
 
 
     private SpannableString generateCenterSpannableText(String value) {
-        SpannableString s = new SpannableString(value);
-        return s;
+        SpannableString ss = new SpannableString(value);
+        ss.setSpan(new RelativeSizeSpan(2.5f), 0, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ss;
     }
 
 

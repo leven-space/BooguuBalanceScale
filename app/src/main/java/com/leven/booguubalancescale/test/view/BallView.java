@@ -24,7 +24,7 @@ import com.leven.booguubalancescale.R;
  */
 
 public class BallView extends View {
-    private static final String TAG="BallView";
+    private static final String TAG = "BallView";
     //Path
     private Bitmap mBitmap;
     private Paint pathPaint;
@@ -34,7 +34,7 @@ public class BallView extends View {
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 2;
     //Ball
-    private float centerXY=0;
+    private float centerXY = 415;
     private float bitmapX = 0;
     private float bitmapY = 0;
     private Paint ballPaint;
@@ -57,7 +57,7 @@ public class BallView extends View {
     }
 
     private void init(Context context) {
-        this.mContext=context;
+        this.mContext = context;
         ballPaint = new Paint(); // 创建并实例化Paint的对象
         ballBitmap = BitmapFactory.decodeResource(this.getResources(), R.mipmap.ball); // 根据图片生成位图对象
         //init path
@@ -86,8 +86,8 @@ public class BallView extends View {
         invalidate();
     }
 
-    public void calibrate(){
-        move(centerXY,centerXY);
+    public void calibrate() {
+        move(centerXY, centerXY);
     }
 
     /**
@@ -105,10 +105,10 @@ public class BallView extends View {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        Log.i(TAG, "onLayout: :"+left+"--"+top+"--"+right+"--"+bottom);
-        centerXY=right/2-35;
-        bitmapY=centerXY;
-        bitmapX=centerXY;
+        Log.i(TAG, "onLayout: :" + left + "--" + top + "--" + right + "--" + bottom);
+        centerXY = right / 2 - 35;
+        bitmapY = centerXY;
+        bitmapX = centerXY;
         super.onLayout(changed, left, top, right, bottom);
     }
 
@@ -161,7 +161,6 @@ public class BallView extends View {
     }
 
 
-
     private void touch_start(float x, float y) {
         mPath.reset();
         mPath.moveTo(x, y);
@@ -185,5 +184,11 @@ public class BallView extends View {
         mPath.reset();
     }
 
+    public float getCenterXY() {
+        return centerXY;
+    }
 
+    public void setCenterXY(float centerXY) {
+        this.centerXY = centerXY;
+    }
 }

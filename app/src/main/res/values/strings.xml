@@ -17,7 +17,7 @@
     <string name="result_pie_instability">Instability Index</string>
     <string name="result_pie_direction">Direction Variation</string>
     <string name="result_pie_falling">Falling Risk</string>
-    <string name="result_desc_instability">ABCDJDSIFUSDHFUISDHFISDfsdjiofjosdjfodsjofJSIFOJFIOSJDOJFIOJSDIOJ</string>
-    <string name="result_desc_direction">SHUIFGSOAIJIFOSD JOSDJIFOJOSDIHFWEAHOJO FSJDIOFJOSDJFIOSFNAOUFGHSOHF</string>
-    <string name="result_desc_falling">SJFSIHUIFSHINAIFHUIEHUIFH FHSIDFHUIDSHIUFHUISDHIHF</string>
+    <string name="result_desc_instability">Instability Index tells how well body adapts to unperceptible vibrations.Lower index, better stability.</string>
+    <string name="result_desc_direction">Direction Variation tells if the body is well balanced in all directions.Lower DV, better direction balance.</string>
+    <string name="result_desc_falling">Falling Risk predicts falling probability. Lower score, lower risk.</string>
 </resources>

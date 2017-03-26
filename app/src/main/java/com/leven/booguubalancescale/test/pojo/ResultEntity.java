@@ -13,8 +13,9 @@ import java.util.ArrayList;
 public class ResultEntity implements Parcelable {
 
     private ArrayList<DataEntity> dataEntities;
-
     private ArrayList<PointEntity> pointEntities;
+    private float xPoint;
+    private float yPoint;
 
     public ResultEntity() {
         dataEntities = new ArrayList<>();
@@ -37,13 +38,28 @@ public class ResultEntity implements Parcelable {
         this.dataEntities = dataEntities;
     }
 
-
     public ArrayList<PointEntity> getPointEntities() {
         return pointEntities;
     }
 
     public void setPointEntities(ArrayList<PointEntity> pointEntities) {
         this.pointEntities = pointEntities;
+    }
+
+    public float getxPoint() {
+        return xPoint;
+    }
+
+    public void setxPoint(float xPoint) {
+        this.xPoint = xPoint;
+    }
+
+    public float getyPoint() {
+        return yPoint;
+    }
+
+    public void setyPoint(float yPoint) {
+        this.yPoint = yPoint;
     }
 
 
@@ -56,11 +72,15 @@ public class ResultEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(this.dataEntities);
         dest.writeTypedList(this.pointEntities);
+        dest.writeFloat(this.xPoint);
+        dest.writeFloat(this.yPoint);
     }
 
     protected ResultEntity(Parcel in) {
         this.dataEntities = in.createTypedArrayList(DataEntity.CREATOR);
         this.pointEntities = in.createTypedArrayList(PointEntity.CREATOR);
+        this.xPoint = in.readFloat();
+        this.yPoint = in.readFloat();
     }
 
     public static final Parcelable.Creator<ResultEntity> CREATOR = new Parcelable.Creator<ResultEntity>() {

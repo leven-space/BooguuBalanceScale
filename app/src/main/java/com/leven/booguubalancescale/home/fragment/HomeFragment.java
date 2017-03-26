@@ -150,7 +150,6 @@ public class HomeFragment extends SupportFragment implements View.OnClickListene
         super.onSupportInvisible();
         isCurrentFragment = false;
         // todo,当该Fragment对用户不可见时
-
     }
 
     @Override
