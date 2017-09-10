@@ -97,5 +97,4 @@ public class PathView extends View {
         canvas.drawPath(mPath, mPaint);
     }
 
-
 }

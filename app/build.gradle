@@ -38,6 +38,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.2'
     compile 'com.afollestad.material-dialogs:commons:0.9.4.2'
     compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.2'
     testCompile 'junit:junit:4.12'
     compile files('src/main/lib/mpandroidchartlibrary-2-2-4.jar')
 }
