@@ -152,7 +152,7 @@ public class CalculationUtil {
         }
     }
 
-    public double[] fourierLowPassFilter(double[] data, double lowPass, double frequency) {
+    public static double[] fourierLowPassFilter(double[] data, double lowPass, double frequency) {
         //data: input data, must be spaced equally in time.
         //lowPass: The cutoff frequency at which
         //frequency: The frequency of the input data.

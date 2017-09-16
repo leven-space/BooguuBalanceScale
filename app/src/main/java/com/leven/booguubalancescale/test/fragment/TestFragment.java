@@ -28,6 +28,7 @@ import com.leven.booguubalancescale.test.pojo.DataEntity;
 import com.leven.booguubalancescale.test.pojo.PieDataList;
 import com.leven.booguubalancescale.test.pojo.PointEntity;
 import com.leven.booguubalancescale.test.pojo.ResultEntity;
+import com.leven.booguubalancescale.test.util.CalculationUtil;
 import com.leven.booguubalancescale.test.view.BallView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -281,19 +282,37 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         } else {
             short sumX = 0;
             short sumY = 0;
-            for (String t : dataList) {
+            //添加滤波
+            int size = dataList.size();
+            double[] xgArray = new double[size];
+            double[] ygArray = new double[size];
+            //将数据转化为10进制
+            for (int i = 0; i < size; i++) {
+                String t = dataList.get(i);
                 try {
                     String xStr = StringUtils.substring(t, 10, 14);
                     String yStr = StringUtils.substring(t, 14, 18);
                     short x = ((short) StringConverterUtil.hexToInteger(xStr));
                     short y = (short) StringConverterUtil.hexToInteger(yStr);
-                    xg = Float.valueOf(x) / 16384;
-                    yg = Float.valueOf(y) / 16384;
-                    sumX += xg * 5000;
-                    sumY += yg * 5000;
+                    double xg = Float.valueOf(x) / 16384;
+                    double yg = Float.valueOf(y) / 16384;
+                    xgArray[i] = xg;
+                    ygArray[i] = yg;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+            double lowPass = 5;//截至频率
+            double frequency = 100;//采样频率
+            double[] xgFilterList = CalculationUtil.fourierLowPassFilter(xgArray, lowPass, frequency);
+            double[] ygFilterList = CalculationUtil.fourierLowPassFilter(ygArray, lowPass, frequency);
+
+            for (double aXgFilterList : xgFilterList) {
+                sumX += aXgFilterList * 5000;
+            }
+
+            for (double aYgFilterList : ygFilterList) {
+                sumY += aYgFilterList * 5000;
             }
             int len = dataList.size();
             xPoint = (sumX / len) + CENTER_OFFSET;
