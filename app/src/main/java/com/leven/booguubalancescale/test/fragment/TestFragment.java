@@ -28,7 +28,6 @@ import com.leven.booguubalancescale.test.pojo.DataEntity;
 import com.leven.booguubalancescale.test.pojo.PieDataList;
 import com.leven.booguubalancescale.test.pojo.PointEntity;
 import com.leven.booguubalancescale.test.pojo.ResultEntity;
-import com.leven.booguubalancescale.test.util.CalculationUtil;
 import com.leven.booguubalancescale.test.view.BallView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,8 +49,6 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     private int yOffset = 0;
     private int xPoint;
     private int yPoint;
-    private float xg;
-    private float yg;
     private OnTrainFragmentInteractionListener mListener;
     private boolean isConnected = true;
     private ResultEntity resultData;
@@ -225,34 +222,43 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
      * @return
      */
     private ArrayList<String> assembleData(String data) {
-        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> effectiveValues = new ArrayList<>();//有效的字符串数据
+
         if (StringUtils.isNotEmpty(tempData)) {
             int needLength = TAG_VALUE_LENGTH - tempData.length();
             String needStr = StringUtils.substring(data, 0, needLength);
             String tag = StringUtils.substring(data, needLength, needLength + 2);
-            if (!StringUtils.equalsAny(tag, "C5", "C6")) {
+            if (!StringUtils.equalsAny(tag, "C5", "C6") || needStr.length() != TAG_VALUE_LENGTH) {
                 Log.e(TAG, "convertData: 错误的传输数据");
             } else {
                 tempData.append(needStr);
-                values.add(tempData.toString());
+                effectiveValues.add(tempData.toString());
             }
             tempData.delete(0, tempData.length());
         }
 
-        if (StringUtils.containsAny(data, "C5", "C6")) {
-            int startIndex = StringUtils.indexOfAny(data, "C5", "C6");
-            int endIndex = startIndex + TAG_VALUE_LENGTH;
-            if (startIndex <= 20 && data.length() >= 20) {
-                String value = StringUtils.substring(data, startIndex, endIndex);
-                values.add(value);
-                String surplusStr = StringUtils.substring(data, endIndex);
-                assembleData(surplusStr);
+        String surplusStr = data;
+        do {
+            if (StringUtils.containsAny(data, "C5", "C6")) {
+                int startIndex = StringUtils.indexOfAny(surplusStr, "C5", "C6");
+                int endIndex = startIndex + TAG_VALUE_LENGTH;
+                if (startIndex <= 20 && surplusStr.length() >= 20) {
+                    String value = StringUtils.substring(data, startIndex, endIndex);
+                    effectiveValues.add(value);
+                    surplusStr = StringUtils.substring(surplusStr, endIndex);
+                } else {
+                    if (StringUtils.isNotBlank(surplusStr)) {
+                        String partValue = StringUtils.substring(surplusStr, startIndex);
+                        tempData.append(partValue);
+                    }
+                    break;
+                }
             } else {
-                String partValue = StringUtils.substring(data, startIndex);
-                tempData.append(partValue);
+                break;
             }
-        }
-        return values;
+        } while (StringUtils.isNotBlank(surplusStr));
+
+        return effectiveValues;
     }
 
     private void convertData(String data) {
@@ -265,9 +271,14 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                 short x = ((short) StringConverterUtil.hexToInteger(xStr));
                 short y = (short) StringConverterUtil.hexToInteger(yStr);
                 short z = (short) StringConverterUtil.hexToInteger(zStr);
-                float xg = Float.valueOf(x) / 16384;
-                float yg = Float.valueOf(y) / 16384;
-                float zg = Float.valueOf(z) / 16384;
+                float xg = (float) x / 16384;
+                float yg = (float) y / 16384;
+                float zg = (float) z / 16384;
+                //只保留小数点一位
+                xg = this.parseFloat(xg);
+                yg = this.parseFloat(yg);
+                zg = this.parseFloat(zg);
+
                 if (!canGoBack) {
                     resultData.add(new DataEntity(xg, yg, zg));
                 }
@@ -277,15 +288,14 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
             }
         }
 
-        if (dataList.size() < 20) {
+        if (dataList.size() < 5) {
             dataList.addAll(tempDataList);
         } else {
             short sumX = 0;
             short sumY = 0;
             //添加滤波
             int size = dataList.size();
-            double[] xgArray = new double[size];
-            double[] ygArray = new double[size];
+
             //将数据转化为10进制
             for (int i = 0; i < size; i++) {
                 String t = dataList.get(i);
@@ -294,29 +304,20 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
                     String yStr = StringUtils.substring(t, 14, 18);
                     short x = ((short) StringConverterUtil.hexToInteger(xStr));
                     short y = (short) StringConverterUtil.hexToInteger(yStr);
-                    double xg = Float.valueOf(x) / 16384;
-                    double yg = Float.valueOf(y) / 16384;
-                    xgArray[i] = xg;
-                    ygArray[i] = yg;
+                    float xg = (float) x / 16384;
+                    float yg = (float) y / 16384;
+                    xg = this.parseFloat(xg);
+                    yg = this.parseFloat(yg);
+                    sumX += xg * 2000;
+                    sumY += yg * 2000;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            double lowPass = 5;//截至频率
-            double frequency = 100;//采样频率
-            double[] xgFilterList = CalculationUtil.fourierLowPassFilter(xgArray, lowPass, frequency);
-            double[] ygFilterList = CalculationUtil.fourierLowPassFilter(ygArray, lowPass, frequency);
-
-            for (double aXgFilterList : xgFilterList) {
-                sumX += aXgFilterList * 5000;
-            }
-
-            for (double aYgFilterList : ygFilterList) {
-                sumY += aYgFilterList * 5000;
-            }
             int len = dataList.size();
-            xPoint = (sumX / len) + CENTER_OFFSET;
-            yPoint = (sumY / len) + CENTER_OFFSET;
+            xPoint = (sumX / len) + CENTER_OFFSET + 220;
+            yPoint = (sumY / len) + CENTER_OFFSET + 220;
             dataList.clear();
             int tempX = xPoint - xOffset;
             int tempY = yPoint - yOffset;
@@ -385,10 +386,10 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
     }
 
     private void calibrate() {
-        xOffset = xPoint - CENTER_OFFSET;
-        yOffset = yPoint - CENTER_OFFSET;
-        resultData.setyPoint(yg);
-        resultData.setxPoint(xg);
+        xOffset = xPoint - CENTER_OFFSET - 220;
+        yOffset = yPoint - CENTER_OFFSET - 220;
+        resultData.setyPoint(yPoint);
+        resultData.setxPoint(xPoint);
         //ballView.calibrate();
     }
 
@@ -490,6 +491,14 @@ public class TestFragment extends SupportFragment implements View.OnClickListene
         pieChart0.setNoDataText("");
         pieChart0.highlightValues(null);
         pieChart0.invalidate();
+    }
+
+
+    private float parseFloat(float data) {
+        String strData = String.valueOf(data);
+        int indexOfPoint = StringUtils.indexOf(strData, ".");
+        String substring = StringUtils.substring(strData, 0, indexOfPoint + 2);
+        return Float.parseFloat(substring);
     }
 
 

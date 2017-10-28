@@ -9,7 +9,7 @@ public class CmdUtil {
     /**
      * 采集电压
      */
-    public static final int collectedAmount = 0xA8;
+    public static final int collectedAmount = 0xA9;
     /**
      * 采集数据
      */

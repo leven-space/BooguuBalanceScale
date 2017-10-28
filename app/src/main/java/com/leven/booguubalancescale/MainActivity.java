@@ -181,9 +181,9 @@ public class MainActivity extends SupportActivity implements HomeFragment.OnHome
     public void sendStopCollectDataCmd() {
         if (BuildConfig.DEBUG) Log.d(TAG, "停止采样");
         mBluetoothLeService.writeValue(CmdUtil.stopCollectedData);
-        mBluetoothLeService.close();
+        // mBluetoothLeService.close();
         String address = Prefs.getString("mac", DEFAULT_DEVICE);
-        mBluetoothLeService.connect(address);
+        //mBluetoothLeService.connect(address);
     }
 
 
